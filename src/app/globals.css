@@ -47,14 +47,6 @@ body {
   transition-timing-function: ease;
 }
 
-/* Ad container styles */
-.ad-container {
-  min-height: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

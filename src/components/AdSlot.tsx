@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface AdSlotProps {
-  slot: string; // Your AdSense ad slot ID
+  slot: string;
   format?: 'auto' | 'rectangle' | 'horizontal' | 'vertical';
   responsive?: boolean;
   className?: string;
@@ -22,28 +22,24 @@ export default function AdSlot({
   className = '',
 }: AdSlotProps) {
   const adRef = useRef<HTMLDivElement>(null);
+  const [adsLoaded, setAdsLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      if (typeof window !== 'undefined' && window.adsbygoogle) {
+    if (typeof window !== 'undefined' && window.adsbygoogle) {
+      try {
         window.adsbygoogle.push({});
+        setAdsLoaded(true);
+      } catch {
+        // AdSense not loaded yet
       }
-    } catch {
-      // Ad blocker or AdSense not loaded
     }
   }, []);
 
-  // Don't render in development
-  if (process.env.NODE_ENV === 'development') {
-    return (
-      <div className={`bg-gray-100 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center p-4 ${className}`}>
-        <span className="text-sm text-gray-400">Ad Slot: {slot || 'Configure in AdSense'}</span>
-      </div>
-    );
-  }
+  // Don't render anything if AdSense isn't active
+  if (!adsLoaded) return null;
 
   return (
-    <div ref={adRef} className={`ad-container ${className}`}>
+    <div ref={adRef} className={className}>
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
