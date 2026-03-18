@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import LotteryBalls from '@/components/LotteryBalls';
-import AdSlot from '@/components/AdSlot';
 import { fetchPastResults, formatDate } from '@/lib/api/lottery-api';
 import { MEGA_MILLIONS } from '@/lib/data/games';
 import { getResultDateSEO } from '@/lib/data/seo';
@@ -34,8 +33,6 @@ export default async function MegaMillionsResultDatePage({ params }: { params: P
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
         Mega Millions Results for {formatDate(date)}
       </h1>
-
-      <AdSlot slot="result-top" format="horizontal" className="my-6" />
 
       {result ? (
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 sm:p-8 mb-8">
@@ -88,8 +85,6 @@ export default async function MegaMillionsResultDatePage({ params }: { params: P
           </Link>
         ) : <div />}
       </div>
-
-      <AdSlot slot="result-bottom" format="horizontal" />
     </div>
   );
 }

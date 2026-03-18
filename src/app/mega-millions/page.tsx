@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import LotteryBalls from '@/components/LotteryBalls';
 import Countdown from '@/components/Countdown';
-import AdSlot from '@/components/AdSlot';
 import { getLatestResult, fetchPastResults, formatDate, formatShortDate } from '@/lib/api/lottery-api';
 import { MEGA_MILLIONS } from '@/lib/data/games';
 import { getGameSEO } from '@/lib/data/seo';
@@ -77,8 +76,6 @@ export default async function MegaMillionsPage() {
         )}
       </div>
 
-      <AdSlot slot="mm-top" format="horizontal" className="mb-8" />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Past Mega Millions Results</h2>
@@ -123,8 +120,6 @@ export default async function MegaMillionsPage() {
         </div>
 
         <div className="space-y-6">
-          <AdSlot slot="mm-sidebar" format="rectangle" />
-
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
             <h3 className="font-bold text-gray-900 dark:text-white mb-3">About Mega Millions</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{MEGA_MILLIONS.description}</p>

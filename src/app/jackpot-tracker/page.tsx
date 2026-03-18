@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import AdSlot from '@/components/AdSlot';
 import Countdown from '@/components/Countdown';
 import { getLatestResult } from '@/lib/api/lottery-api';
 import { POWERBALL, MEGA_MILLIONS } from '@/lib/data/games';
@@ -54,8 +53,6 @@ export default async function JackpotTrackerPage() {
         All current lottery jackpots in one place, updated after every draw
       </p>
 
-      <AdSlot slot="jackpot-top" format="horizontal" className="mb-8" />
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         {jackpots.map(j => (
           <Link
@@ -81,8 +78,6 @@ export default async function JackpotTrackerPage() {
           </Link>
         ))}
       </div>
-
-      <AdSlot slot="jackpot-bottom" format="horizontal" className="mb-8" />
 
       <section className="prose dark:prose-invert max-w-none">
         <h2>US Lottery Jackpots</h2>

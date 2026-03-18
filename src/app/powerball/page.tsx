@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import LotteryBalls from '@/components/LotteryBalls';
 import Countdown from '@/components/Countdown';
-import AdSlot from '@/components/AdSlot';
 import { getLatestResult, fetchPastResults, formatDate, formatShortDate } from '@/lib/api/lottery-api';
 import { POWERBALL } from '@/lib/data/games';
 import { getGameSEO } from '@/lib/data/seo';
@@ -88,8 +87,6 @@ export default async function PowerballPage() {
         )}
       </div>
 
-      <AdSlot slot="powerball-top" format="horizontal" className="mb-8" />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Past Results */}
         <div className="lg:col-span-2">
@@ -145,8 +142,6 @@ export default async function PowerballPage() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <AdSlot slot="powerball-sidebar" format="rectangle" className="mb-6" />
-
           {/* Game Info */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
             <h3 className="font-bold text-gray-900 dark:text-white mb-3">About Powerball</h3>

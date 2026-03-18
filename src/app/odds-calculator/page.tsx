@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import AdSlot from '@/components/AdSlot';
 import { NATIONAL_GAMES, STATE_GAMES } from '@/lib/data/games';
 import { GameConfig } from '@/lib/types';
 
@@ -55,8 +54,6 @@ export default function OddsCalculatorPage() {
       <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
         Calculate your chances of winning any US lottery game
       </p>
-
-      <AdSlot slot="odds-top" format="horizontal" className="mb-8" />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
@@ -140,7 +137,6 @@ export default function OddsCalculatorPage() {
         </div>
 
         <div className="space-y-6">
-          <AdSlot slot="odds-sidebar" format="rectangle" />
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
             <h3 className="font-bold text-gray-900 dark:text-white mb-3">Understanding Odds</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">

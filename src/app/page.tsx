@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import ResultCard from '@/components/ResultCard';
-import AdSlot from '@/components/AdSlot';
 import Countdown from '@/components/Countdown';
 import { getLatestResult } from '@/lib/api/lottery-api';
 import { POWERBALL, MEGA_MILLIONS } from '@/lib/data/games';
@@ -34,9 +33,6 @@ export default async function HomePage() {
           Check the latest Powerball, Mega Millions, and state lottery winning numbers. Updated instantly after every draw.
         </p>
       </section>
-
-      {/* Top Ad */}
-      <AdSlot slot="top-banner" format="horizontal" className="mb-8" />
 
       {/* Main Results Grid */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
@@ -72,9 +68,6 @@ export default async function HomePage() {
           )}
         </div>
       </section>
-
-      {/* Mid Ad */}
-      <AdSlot slot="mid-content" format="auto" className="mb-10" />
 
       {/* State Lotteries Section */}
       <section className="mb-10">
@@ -155,9 +148,6 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-      {/* Bottom Ad */}
-      <AdSlot slot="bottom-banner" format="horizontal" className="mb-8" />
 
       {/* SEO Content */}
       <section className="prose dark:prose-invert max-w-none">

@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import LotteryBalls from '@/components/LotteryBalls';
-import AdSlot from '@/components/AdSlot';
 import { STATES } from '@/lib/data/states';
 import { STATE_GAMES, getGameBySlug } from '@/lib/data/games';
 import { getGameSEO } from '@/lib/data/seo';
@@ -72,8 +71,6 @@ export default async function GamePage({ params }: { params: Promise<{ state: st
         )}
       </div>
 
-      <AdSlot slot="game-top" format="horizontal" className="mb-8" />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           {/* How to Play */}
@@ -120,8 +117,6 @@ export default async function GamePage({ params }: { params: Promise<{ state: st
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <AdSlot slot="game-sidebar" format="rectangle" />
-
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
             <h3 className="font-bold text-gray-900 dark:text-white mb-3">Game Info</h3>
             <div className="space-y-2 text-sm">

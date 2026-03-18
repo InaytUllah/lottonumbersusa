@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import AdSlot from '@/components/AdSlot';
 import { STATES, getStateBySlug } from '@/lib/data/states';
 import { getStateSEO } from '@/lib/data/seo';
 import { notFound } from 'next/navigation';
@@ -43,8 +42,6 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
           Latest winning numbers for all {state.name} lottery games
         </p>
       </div>
-
-      <AdSlot slot="state-top" format="horizontal" className="mb-8" />
 
       {/* National Games */}
       <section className="mb-10">
@@ -108,8 +105,6 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
           ))}
         </div>
       </section>
-
-      <AdSlot slot="state-bottom" format="horizontal" className="mb-8" />
 
       {/* Info Card */}
       <section className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6">

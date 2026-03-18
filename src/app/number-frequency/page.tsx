@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import AdSlot from '@/components/AdSlot';
 import { fetchPastResults } from '@/lib/api/lottery-api';
 
 export const revalidate = 3600; // 1 hour
@@ -56,8 +55,6 @@ export default async function NumberFrequencyPage() {
       <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
         See which numbers are drawn most and least often based on the last 100 draws
       </p>
-
-      <AdSlot slot="freq-top" format="horizontal" className="mb-8" />
 
       {/* Powerball Frequency */}
       <section className="mb-10">
@@ -121,8 +118,6 @@ export default async function NumberFrequencyPage() {
           </div>
         </div>
       </section>
-
-      <AdSlot slot="freq-mid" format="horizontal" className="mb-8" />
 
       {/* Mega Millions Frequency */}
       <section className="mb-10">

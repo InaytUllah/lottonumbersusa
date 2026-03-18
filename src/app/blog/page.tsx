@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import AdSlot from '@/components/AdSlot';
 import { fetchPastResults, formatDate } from '@/lib/api/lottery-api';
 
 export const revalidate = 3600;
@@ -51,8 +50,6 @@ export default async function BlogPage() {
         Latest lottery results, jackpot alerts, and analysis
       </p>
 
-      <AdSlot slot="blog-top" format="horizontal" className="mb-8" />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           {posts.map(post => (
@@ -87,8 +84,6 @@ export default async function BlogPage() {
         </div>
 
         <div className="space-y-6">
-          <AdSlot slot="blog-sidebar" format="rectangle" />
-
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
             <h3 className="font-bold text-gray-900 dark:text-white mb-3">Popular Pages</h3>
             <ul className="space-y-2">

@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import AdSlot from '@/components/AdSlot';
 import { STATES } from '@/lib/data/states';
 
 export const metadata: Metadata = {
@@ -29,8 +28,6 @@ export default function StatesPage() {
       <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
         Select your state to check the latest lottery winning numbers
       </p>
-
-      <AdSlot slot="states-top" format="horizontal" className="mb-8" />
 
       {statesByRegion.map(({ region, states }) => (
         <section key={region} className="mb-10">
