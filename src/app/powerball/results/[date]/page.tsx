@@ -1,0 +1,123 @@
+import { Metadata } from 'next';
+import Link from 'next/link';
+import LotteryBalls from '@/components/LotteryBalls';
+import AdSlot from '@/components/AdSlot';
+import { fetchPastResults, formatDate } from '@/lib/api/lottery-api';
+import { POWERBALL } from '@/lib/data/games';
+import { getResultDateSEO } from '@/lib/data/seo';
+
+export async function generateMetadata({ params }: { params: Promise<{ date: string }> }): Promise<Metadata> {
+  const { date } = await params;
+  const seo = getResultDateSEO('Powerball', date);
+  return { title: seo.title, description: seo.description, keywords: seo.keywords };
+}
+
+export default async function PowerballResultDatePage({ params }: { params: Promise<{ date: string }> }) {
+  const { date } = await params;
+
+  // Find this specific result
+  const allResults = await fetchPastResults('powerball', 100);
+  const result = allResults.find(r => r.drawDate === date);
+  const resultIndex = allResults.findIndex(r => r.drawDate === date);
+  const prevResult = resultIndex < allResults.length - 1 ? allResults[resultIndex + 1] : null;
+  const nextResult = resultIndex > 0 ? allResults[resultIndex - 1] : null;
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <nav className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+        <Link href="/" className="hover:text-blue-600 transition-colors">Home</Link>
+        <span className="mx-2">/</span>
+        <Link href="/powerball" className="hover:text-blue-600 transition-colors">Powerball</Link>
+        <span className="mx-2">/</span>
+        <span className="text-gray-900 dark:text-white">{formatDate(date)}</span>
+      </nav>
+
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        Powerball Results for {formatDate(date)}
+      </h1>
+
+      <AdSlot slot="result-top" format="horizontal" className="my-6" />
+
+      {result ? (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 sm:p-8 mb-8">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Winning Numbers</p>
+          <LotteryBalls
+            numbers={result.numbers}
+            bonusBall={result.bonusBall}
+            bonusBallName="Powerball"
+            multiplier={result.multiplier}
+            multiplierName="Power Play"
+            size="lg"
+            gameColor={POWERBALL.color}
+          />
+
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+              <p className="text-xs text-gray-500 dark:text-gray-400">White Balls</p>
+              <p className="font-bold text-gray-900 dark:text-white">{result.numbers.join(', ')}</p>
+            </div>
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+              <p className="text-xs text-gray-500 dark:text-gray-400">Powerball</p>
+              <p className="font-bold text-red-600">{result.bonusBall}</p>
+            </div>
+            {result.multiplier && (
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+                <p className="text-xs text-gray-500 dark:text-gray-400">Power Play</p>
+                <p className="font-bold text-yellow-600">{result.multiplier}x</p>
+              </div>
+            )}
+            {result.jackpot && (
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+                <p className="text-xs text-gray-500 dark:text-gray-400">Jackpot</p>
+                <p className="font-bold text-green-600">{result.jackpot}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-6 mb-8 text-center">
+          <p className="text-yellow-800 dark:text-yellow-200">
+            No Powerball draw was held on this date, or results are not yet available.
+          </p>
+        </div>
+      )}
+
+      {/* Navigation */}
+      <div className="flex items-center justify-between mb-8">
+        {prevResult ? (
+          <Link
+            href={`/powerball/results/${prevResult.drawDate}`}
+            className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            {formatDate(prevResult.drawDate)}
+          </Link>
+        ) : <div />}
+        {nextResult ? (
+          <Link
+            href={`/powerball/results/${nextResult.drawDate}`}
+            className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+          >
+            {formatDate(nextResult.drawDate)}
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        ) : <div />}
+      </div>
+
+      <AdSlot slot="result-bottom" format="horizontal" />
+
+      <section className="mt-8 prose dark:prose-invert max-w-none">
+        <h2>Powerball Draw on {formatDate(date)}</h2>
+        <p>
+          These are the official Powerball winning numbers for the draw held on {formatDate(date)}.
+          Powerball draws take place every Monday, Wednesday, and Saturday at {POWERBALL.drawTime}.
+          Check your tickets against these numbers to see if you are a winner.
+        </p>
+      </section>
+    </div>
+  );
+}
