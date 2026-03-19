@@ -51,19 +51,29 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Tools */}
+          {/* Info & Tools */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Tools</h3>
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Tools & Info</h3>
             <ul className="space-y-2">
               <li><Link href="/number-generator" className="text-sm hover:text-white transition-colors">Number Generator</Link></li>
               <li><Link href="/odds-calculator" className="text-sm hover:text-white transition-colors">Odds Calculator</Link></li>
-              <li><Link href="/number-frequency" className="text-sm hover:text-white transition-colors">Number Frequency</Link></li>
               <li><Link href="/blog" className="text-sm hover:text-white transition-colors">Lottery Blog</Link></li>
+              <li><Link href="/about" className="text-sm hover:text-white transition-colors">About Us</Link></li>
+              <li><Link href="/contact" className="text-sm hover:text-white transition-colors">Contact Us</Link></li>
             </ul>
           </div>
         </div>
 
+        {/* Responsible Gaming */}
         <div className="border-t border-gray-800 mt-10 pt-8">
+          <div className="bg-gray-800/50 rounded-xl p-4 mb-6">
+            <p className="text-xs text-gray-400 leading-relaxed">
+              <strong className="text-gray-300">Play Responsibly:</strong> Lottery games should be played for entertainment only. Never spend more than you can afford to lose. If you or someone you know has a gambling problem, call the National Council on Problem Gambling helpline at <strong>1-800-522-4700</strong> (available 24/7) or visit{' '}
+              <a href="https://www.ncpgambling.org" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">ncpgambling.org</a>.
+              You must be 18 or older to play lottery games.
+            </p>
+          </div>
+
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-500">
               &copy; {new Date().getFullYear()} LottoNumbersUSA.com. All rights reserved. Not affiliated with any state or national lottery organization.
@@ -75,7 +85,7 @@ export default function Footer() {
             </div>
           </div>
           <p className="text-xs text-gray-600 mt-4 text-center">
-            Lottery results are provided for informational purposes only. Always verify your numbers with your official state lottery. Please play responsibly.
+            Lottery results are provided for informational purposes only. Always verify your numbers with your official state lottery.
           </p>
         </div>
       </div>

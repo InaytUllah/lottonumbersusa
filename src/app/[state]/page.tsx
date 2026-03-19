@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import JsonLd, { getBreadcrumbSchema } from '@/components/JsonLd';
 import { STATES, getStateBySlug } from '@/lib/data/states';
 import { getStateSEO } from '@/lib/data/seo';
 import { notFound } from 'next/navigation';
@@ -13,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ state: st
   const state = getStateBySlug(stateSlug);
   if (!state) return {};
   const seo = getStateSEO(state.name);
-  return { title: seo.title, description: seo.description, keywords: seo.keywords };
+  return { title: seo.title, description: seo.description, alternates: { canonical: seo.canonical } };
 }
 
 export default async function StatePage({ params }: { params: Promise<{ state: string }> }) {
@@ -26,6 +27,12 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <JsonLd data={getBreadcrumbSchema([
+        { name: 'Home', url: 'https://lottonumbersusa.com' },
+        { name: 'States', url: 'https://lottonumbersusa.com/states' },
+        { name: `${state.name} Lottery`, url: `https://lottonumbersusa.com/${stateSlug}` },
+      ])} />
+
       <nav className="text-sm text-gray-500 dark:text-gray-400 mb-6">
         <Link href="/" className="hover:text-blue-600 transition-colors">Home</Link>
         <span className="mx-2">/</span>
@@ -131,9 +138,26 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
       <section className="mt-10 prose dark:prose-invert max-w-none">
         <h2>{state.name} Lottery Winning Numbers</h2>
         <p>
-          Check the latest {state.name} lottery results including all state-specific games plus national games
-          like Powerball and Mega Millions. {state.name} offers {stateGames.length} state lottery games with
-          draws happening daily. All results are updated automatically after each draw.
+          Check the latest {state.name} lottery results right here at LottoNumbersUSA.com. The {state.name} Lottery
+          offers {stateGames.length} state-specific {stateGames.length === 1 ? 'game' : 'games'}
+          {stateGames.length > 0 && <> including {stateGames.map(g => g.name).join(', ')}</>}, in addition to
+          national multi-state games like Powerball and Mega Millions. All {state.name} lottery results are updated
+          automatically after each official draw.
+        </p>
+        <h3>Playing the Lottery in {state.name}</h3>
+        <p>
+          {state.name} lottery players have access to a total of {state.games.length} games, ranging from daily
+          draw games to multi-state jackpot games. Whether you prefer the excitement of Powerball and Mega Millions
+          or the better odds offered by {state.name}&apos;s own state games, you can find all the latest winning
+          numbers and results on this page. Tickets can be purchased at authorized retailers throughout {state.name}.
+        </p>
+        <h3>About the {state.name} Lottery</h3>
+        <p>
+          The {state.name} Lottery is operated by the state and generates revenue that supports public programs
+          and services. Like all US state lotteries, the {state.name} Lottery is regulated to ensure fair play and
+          transparent results. Players must be at least 18 years old to purchase lottery tickets in {state.name}.
+          For official rules, prize claim deadlines, and retailer locations, visit the {state.name} Lottery&apos;s
+          official website at {state.officialSite.replace('https://', '')}.
         </p>
       </section>
     </div>

@@ -8,7 +8,7 @@ import { getResultDateSEO } from '@/lib/data/seo';
 export async function generateMetadata({ params }: { params: Promise<{ date: string }> }): Promise<Metadata> {
   const { date } = await params;
   const seo = getResultDateSEO('Powerball', date);
-  return { title: seo.title, description: seo.description, keywords: seo.keywords };
+  return { title: seo.title, description: seo.description };
 }
 
 export default async function PowerballResultDatePage({ params }: { params: Promise<{ date: string }> }) {

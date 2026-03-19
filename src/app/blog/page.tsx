@@ -23,7 +23,7 @@ export default async function BlogPage() {
       date: r.drawDate,
       excerpt: `The Powerball winning numbers for ${formatDate(r.drawDate)} are ${r.numbers.join(', ')} with Powerball ${r.bonusBall}. ${r.multiplier ? `Power Play was ${r.multiplier}x.` : ''} Check if your numbers match!`,
       game: 'Powerball',
-      link: `/powerball/results/${r.drawDate}`,
+      link: `/blog/powerball-results-${r.drawDate}`,
     })),
     ...mmResults.map(r => ({
       title: `Mega Millions Results for ${formatDate(r.drawDate)}: Numbers ${r.numbers.join(', ')}`,
@@ -31,7 +31,7 @@ export default async function BlogPage() {
       date: r.drawDate,
       excerpt: `The Mega Millions winning numbers for ${formatDate(r.drawDate)} are ${r.numbers.join(', ')} with Mega Ball ${r.bonusBall}. ${r.multiplier ? `Megaplier was ${r.multiplier}x.` : ''}`,
       game: 'Mega Millions',
-      link: `/mega-millions/results/${r.drawDate}`,
+      link: `/blog/mega-millions-results-${r.drawDate}`,
     })),
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 

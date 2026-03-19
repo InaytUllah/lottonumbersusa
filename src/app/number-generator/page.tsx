@@ -1,53 +1,30 @@
-'use client';
-
-import { useState } from 'react';
+import { Metadata } from 'next';
 import Link from 'next/link';
-import LotteryBalls from '@/components/LotteryBalls';
-import { NATIONAL_GAMES, STATE_GAMES } from '@/lib/data/games';
-import { GameConfig } from '@/lib/types';
+import JsonLd, { getBreadcrumbSchema, getFAQSchema } from '@/components/JsonLd';
+import NumberGeneratorClient from '@/components/NumberGeneratorClient';
 
-const allGames: GameConfig[] = [
-  ...NATIONAL_GAMES,
-  ...Object.values(STATE_GAMES).flat(),
+export const metadata: Metadata = {
+  title: 'Free Lottery Number Generator - Random Numbers for Any US Game',
+  description: 'Generate random lottery numbers for Powerball, Mega Millions, and all US state lottery games. Free, fast, and no signup required. Pick your lucky numbers now.',
+  alternates: { canonical: 'https://lottonumbersusa.com/number-generator' },
+};
+
+const generatorFAQs = [
+  { question: 'Is this lottery number generator truly random?', answer: 'Yes, our generator uses a random algorithm to produce numbers with equal probability. Each number in the valid range has the same chance of being selected.' },
+  { question: 'Can a number generator help me win the lottery?', answer: 'No tool can predict lottery outcomes or improve your odds of winning. Every combination has an equal chance. Our generator simply provides a convenient way to pick random numbers instead of choosing them yourself.' },
+  { question: 'Which lottery games can I generate numbers for?', answer: 'You can generate numbers for Powerball, Mega Millions, and all state-specific games including SuperLotto Plus (CA), Lotto Texas, Florida Lotto, New York Lotto, and dozens more.' },
+  { question: 'How many number sets can I generate at once?', answer: 'You can generate 1, 3, 5, 10, or 20 sets of numbers at a time. Each set is independently generated with unique combinations.' },
 ];
 
-// Remove duplicates by slug
-const uniqueGames = allGames.filter((game, index, self) =>
-  index === self.findIndex(g => g.slug === game.slug && g.stateSlug === game.stateSlug)
-);
-
-function generateNumbers(game: GameConfig): { numbers: number[]; bonusBall?: number } {
-  const numbers: number[] = [];
-  const [min, max] = game.mainRange;
-
-  while (numbers.length < game.mainNumbers) {
-    const num = Math.floor(Math.random() * (max - min + 1)) + min;
-    if (!numbers.includes(num)) {
-      numbers.push(num);
-    }
-  }
-  numbers.sort((a, b) => a - b);
-
-  let bonusBall: number | undefined;
-  if (game.bonusBall && game.bonusRange) {
-    bonusBall = Math.floor(Math.random() * (game.bonusRange[1] - game.bonusRange[0] + 1)) + game.bonusRange[0];
-  }
-
-  return { numbers, bonusBall };
-}
-
 export default function NumberGeneratorPage() {
-  const [selectedGame, setSelectedGame] = useState<GameConfig>(NATIONAL_GAMES[0]);
-  const [generated, setGenerated] = useState<{ numbers: number[]; bonusBall?: number }[]>([]);
-  const [count, setCount] = useState(5);
-
-  const handleGenerate = () => {
-    const results = Array.from({ length: count }, () => generateNumbers(selectedGame));
-    setGenerated(results);
-  };
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <JsonLd data={getBreadcrumbSchema([
+        { name: 'Home', url: 'https://lottonumbersusa.com' },
+        { name: 'Number Generator', url: 'https://lottonumbersusa.com/number-generator' },
+      ])} />
+      <JsonLd data={getFAQSchema(generatorFAQs)} />
+
       <nav className="text-sm text-gray-500 dark:text-gray-400 mb-6">
         <Link href="/" className="hover:text-blue-600 transition-colors">Home</Link>
         <span className="mx-2">/</span>
@@ -55,134 +32,59 @@ export default function NumberGeneratorPage() {
       </nav>
 
       <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">
-        Lottery Number Generator
+        Free Lottery Number Generator
       </h1>
       <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-        Generate random lottery numbers for any US lottery game
+        Generate random lottery numbers for Powerball, Mega Millions, or any US lottery game
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          {/* Controls */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 mb-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Select Game
-                </label>
-                <select
-                  value={`${selectedGame.stateSlug || ''}:${selectedGame.slug}`}
-                  onChange={(e) => {
-                    const [stateSlug, gameSlug] = e.target.value.split(':');
-                    const game = uniqueGames.find(g => g.slug === gameSlug && (g.stateSlug || '') === stateSlug);
-                    if (game) setSelectedGame(game);
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                >
-                  <optgroup label="National Games">
-                    {NATIONAL_GAMES.map(g => (
-                      <option key={g.slug} value={`:${g.slug}`}>{g.name}</option>
-                    ))}
-                  </optgroup>
-                  {Object.entries(STATE_GAMES).map(([stateSlug, games]) => (
-                    <optgroup key={stateSlug} label={games[0]?.state || stateSlug}>
-                      {games.map(g => (
-                        <option key={`${stateSlug}:${g.slug}`} value={`${stateSlug}:${g.slug}`}>
-                          {g.name}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  How Many Lines
-                </label>
-                <select
-                  value={count}
-                  onChange={(e) => setCount(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                >
-                  {[1, 3, 5, 10, 20].map(n => (
-                    <option key={n} value={n}>{n} {n === 1 ? 'line' : 'lines'}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+      <NumberGeneratorClient />
 
-            <button
-              onClick={handleGenerate}
-              className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl active:scale-[0.98]"
-            >
-              Generate Numbers
-            </button>
-
-            {/* Game Info */}
-            <div className="mt-4 flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400">
-              <span>Pick {selectedGame.mainNumbers} from {selectedGame.mainRange[0]}-{selectedGame.mainRange[1]}</span>
-              {selectedGame.bonusBall && selectedGame.bonusRange && (
-                <span>+ {selectedGame.bonusBallName} from {selectedGame.bonusRange[0]}-{selectedGame.bonusRange[1]}</span>
-              )}
-            </div>
-          </div>
-
-          {/* Results */}
-          {generated.length > 0 && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-                Your {selectedGame.name} Numbers
-              </h2>
-              <div className="space-y-4">
-                {generated.map((result, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-3 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0"
-                  >
-                    <span className="text-sm text-gray-400 w-6">#{index + 1}</span>
-                    <LotteryBalls
-                      numbers={result.numbers}
-                      bonusBall={result.bonusBall}
-                      bonusBallName={selectedGame.bonusBallName}
-                      size="sm"
-                      gameColor={selectedGame.color}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
-            <h3 className="font-bold text-gray-900 dark:text-white mb-3">About This Tool</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Our lottery number generator uses a cryptographically secure random number generator
-              to produce truly random combinations for any US lottery game. Each number has an equal
-              probability of being selected.
-            </p>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
-            <h3 className="font-bold text-gray-900 dark:text-white mb-3">Quick Links</h3>
-            <ul className="space-y-2">
-              <li><Link href="/powerball" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Powerball Results</Link></li>
-              <li><Link href="/mega-millions" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Mega Millions Results</Link></li>
-              <li><Link href="/number-frequency" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Number Frequency</Link></li>
-              <li><Link href="/odds-calculator" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Odds Calculator</Link></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
+      {/* SSR-visible SEO content - visible to search engine bots */}
       <section className="mt-12 prose dark:prose-invert max-w-none">
-        <h2>Free Lottery Number Generator</h2>
+        <h2>About Our Lottery Number Generator</h2>
         <p>
-          Use our free lottery number generator to pick random numbers for Powerball, Mega Millions, or any
-          state lottery game. Numbers are generated using a random algorithm ensuring fair and unbiased results.
-          Remember, lottery draws are completely random, so every combination has an equal chance of winning.
+          Use our free lottery number generator to pick random numbers for any US lottery game including{' '}
+          <Link href="/powerball">Powerball</Link>, <Link href="/mega-millions">Mega Millions</Link>,
+          SuperLotto Plus, Lotto Texas, Florida Lotto, and dozens more. Numbers are generated using a random
+          algorithm ensuring fair and unbiased results.
         </p>
+        <p>
+          Each number within the valid range has an equal probability of being chosen. Our generator respects
+          the exact rules of each game — the correct number count, number range, and bonus ball rules are all
+          built in automatically when you select your game.
+        </p>
+        <h3>How It Works</h3>
+        <p>
+          Select your lottery game from the dropdown menu, choose how many lines you want to generate (1 to 20),
+          and click &quot;Generate Numbers.&quot; The generator instantly creates random combinations following the
+          exact format of your chosen game. For games with bonus balls (like the red Powerball or
+          Mega Ball), those are generated separately from the correct bonus number pool.
+        </p>
+        <h3>Supported Games</h3>
+        <p>
+          We support all major US lottery games including national games (Powerball and Mega Millions) and
+          state-specific games from California, Texas, Florida, New York, Pennsylvania, Ohio, Georgia, Michigan,
+          North Carolina, and New Jersey. Each game uses its official number ranges and rules.
+        </p>
+      </section>
+
+      {/* FAQ */}
+      <section className="mt-10">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Number Generator FAQ</h2>
+        <div className="space-y-4">
+          {generatorFAQs.map((faq, index) => (
+            <details key={index} className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+              <summary className="flex items-center justify-between cursor-pointer p-5 font-semibold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                {faq.question}
+                <svg className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <p className="px-5 pb-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{faq.answer}</p>
+            </details>
+          ))}
+        </div>
       </section>
     </div>
   );

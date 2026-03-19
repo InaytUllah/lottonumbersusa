@@ -40,8 +40,9 @@ body {
   animation: ballBounce 0.4s ease-in-out;
 }
 
-/* Smooth transitions */
-* {
+/* Smooth transitions - scoped to interactive elements to prevent CLS */
+a, button, input, select, textarea,
+[role="button"] {
   transition-property: background-color, border-color, color;
   transition-duration: 150ms;
   transition-timing-function: ease;

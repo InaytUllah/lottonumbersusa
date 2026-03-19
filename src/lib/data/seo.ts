@@ -5,27 +5,20 @@ const SITE_URL = 'https://lottonumbersusa.com';
 
 export function getHomeSEO(): SEOData {
   return {
-    title: 'Lotto Numbers USA - Latest US Lottery Results & Winning Numbers',
-    description: 'Get the latest Powerball, Mega Millions, and state lottery results. Updated instantly after every draw. Check winning numbers, jackpots, and past results.',
-    keywords: ['lotto numbers usa', 'us lottery results', 'powerball results', 'mega millions results', 'lottery winning numbers', 'us lotto results today'],
+    title: 'Lotto Numbers USA - Latest Powerball, Mega Millions & State Lottery Results',
+    description: 'Check the latest US lottery results for Powerball, Mega Millions, and 40+ state lottery games. Winning numbers updated instantly after every draw. Free number generator, odds calculator, and jackpot tracker.',
     canonical: SITE_URL,
   };
 }
 
 export function getGameSEO(gameName: string, gameSlug: string, stateName?: string): SEOData {
   const prefix = stateName ? `${stateName} ` : '';
+  const stateSlugPart = stateName ? `/${stateName.toLowerCase().replace(/\s+/g, '-')}` : '';
   return {
-    title: `${prefix}${gameName} Results - Latest Winning Numbers | ${SITE_NAME}`,
-    description: `Latest ${prefix}${gameName} winning numbers and results. Check today's draw, past results, jackpot amounts, number frequency and more.`,
-    keywords: [
-      `${gameName.toLowerCase()} results`,
-      `${gameName.toLowerCase()} winning numbers`,
-      `${gameName.toLowerCase()} numbers today`,
-      `${gameName.toLowerCase()} lottery`,
-      stateName ? `${stateName.toLowerCase()} ${gameName.toLowerCase()}` : '',
-    ].filter(Boolean),
+    title: `${prefix}${gameName} Results Today - Latest Winning Numbers | ${SITE_NAME}`,
+    description: `Check today's ${prefix}${gameName} winning numbers and results. View latest draw, past results history, jackpot amounts, hot & cold numbers, odds, and how to play. Updated instantly after every draw.`,
     canonical: stateName
-      ? `${SITE_URL}/${gameSlug}`
+      ? `${SITE_URL}${stateSlugPart}/${gameSlug}`
       : `${SITE_URL}/${gameSlug}`,
   };
 }
@@ -37,44 +30,32 @@ export function getResultDateSEO(gameName: string, date: string, numbers?: numbe
     month: 'long',
     day: 'numeric',
   });
-  const numbersStr = numbers ? `: ${numbers.join(', ')}` : '';
+  const numbersStr = numbers ? ` - ${numbers.join(', ')}` : '';
   return {
     title: `${gameName} Results for ${formattedDate}${numbersStr} | ${SITE_NAME}`,
-    description: `${gameName} winning numbers for ${formattedDate}${numbersStr}. Check if you won, view prize breakdown, and see past results.`,
-    keywords: [
-      `${gameName.toLowerCase()} results ${date}`,
-      `${gameName.toLowerCase()} winning numbers ${formattedDate}`,
-      `${gameName.toLowerCase()} ${date}`,
-    ],
+    description: `Official ${gameName} winning numbers for ${formattedDate}${numbersStr}. Check if you won, view the complete prize breakdown, next jackpot estimate, and previous draw results.`,
   };
 }
 
 export function getStateSEO(stateName: string): SEOData {
   return {
-    title: `${stateName} Lottery Results - All ${stateName} Lotto Numbers | ${SITE_NAME}`,
-    description: `Latest ${stateName} lottery results for all games. Check Powerball, Mega Millions, and ${stateName}-specific lottery winning numbers updated instantly.`,
-    keywords: [
-      `${stateName.toLowerCase()} lottery results`,
-      `${stateName.toLowerCase()} lotto numbers`,
-      `${stateName.toLowerCase()} winning numbers`,
-      `${stateName.toLowerCase()} lottery`,
-    ],
+    title: `${stateName} Lottery Results Today - All ${stateName} Lotto Winning Numbers | ${SITE_NAME}`,
+    description: `Get the latest ${stateName} lottery results for all games including Powerball, Mega Millions, and ${stateName}-specific games. Winning numbers updated instantly after every draw. View past results, jackpots, and odds.`,
+    canonical: `${SITE_URL}/${stateName.toLowerCase().replace(/\s+/g, '-')}`,
   };
 }
 
 export function getToolSEO(toolName: string, toolDescription: string): SEOData {
   return {
-    title: `${toolName} | ${SITE_NAME}`,
-    description: toolDescription,
-    keywords: [toolName.toLowerCase(), 'lottery tools', 'lotto numbers'],
+    title: `Free ${toolName} - ${toolDescription} | ${SITE_NAME}`,
+    description: `${toolDescription} Use our free ${toolName.toLowerCase()} for Powerball, Mega Millions, and all US state lottery games. No signup required.`,
   };
 }
 
 export function getBlogSEO(): SEOData {
   return {
-    title: `Lottery News & Results Blog | ${SITE_NAME}`,
-    description: 'Latest lottery news, jackpot alerts, winning number analysis, and tips. Stay updated with the biggest lottery stories across the US.',
-    keywords: ['lottery news', 'lottery blog', 'jackpot alerts', 'lottery tips'],
+    title: `Lottery News, Results & Analysis Blog | ${SITE_NAME}`,
+    description: 'Latest US lottery news, Powerball & Mega Millions results analysis, jackpot alerts, winning number trends, and lottery tips. Updated daily.',
   };
 }
 

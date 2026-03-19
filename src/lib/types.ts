@@ -77,7 +77,6 @@ export interface NumberFrequency {
 export interface SEOData {
   title: string;
   description: string;
-  keywords: string[];
   canonical?: string;
   ogImage?: string;
 }

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import LotteryBalls from '@/components/LotteryBalls';
+import JsonLd, { getBreadcrumbSchema } from '@/components/JsonLd';
 import { STATES } from '@/lib/data/states';
 import { STATE_GAMES, getGameBySlug } from '@/lib/data/games';
 import { getGameSEO } from '@/lib/data/seo';
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ state: st
   const gameConfig = getGameBySlug(gameSlug, stateSlug);
   if (!gameConfig) return {};
   const seo = getGameSEO(gameConfig.name, gameSlug, gameConfig.state);
-  return { title: seo.title, description: seo.description, keywords: seo.keywords };
+  return { title: seo.title, description: seo.description };
 }
 
 export default async function GamePage({ params }: { params: Promise<{ state: string; game: string }> }) {
@@ -35,6 +36,12 @@ export default async function GamePage({ params }: { params: Promise<{ state: st
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <JsonLd data={getBreadcrumbSchema([
+        { name: 'Home', url: 'https://lottonumbersusa.com' },
+        { name: `${state.name} Lottery`, url: `https://lottonumbersusa.com/${stateSlug}` },
+        { name: `${gameConfig.name} Results`, url: `https://lottonumbersusa.com/${stateSlug}/${gameSlug}` },
+      ])} />
+
       <nav className="text-sm text-gray-500 dark:text-gray-400 mb-6">
         <Link href="/" className="hover:text-blue-600 transition-colors">Home</Link>
         <span className="mx-2">/</span>
