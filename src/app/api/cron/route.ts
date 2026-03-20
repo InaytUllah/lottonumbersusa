@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 
 // This cron endpoint triggers ISR revalidation for lottery results
 // Vercel Cron calls this endpoint on schedule
 
 export async function GET(request: Request) {
   // Verify cron secret (set in Vercel environment variables)
+  // Only check if CRON_SECRET is actually configured
   const authHeader = request.headers.get('authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  const cronSecret = process.env.CRON_SECRET;
+  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -21,19 +24,14 @@ export async function GET(request: Request) {
       '/blog',
     ];
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lottonumbersusa.com';
-
-    const results = await Promise.allSettled(
-      pagesToRevalidate.map(async (path) => {
-        const res = await fetch(`${baseUrl}/api/revalidate?path=${encodeURIComponent(path)}&secret=${process.env.REVALIDATE_SECRET}`);
-        return { path, status: res.status };
-      })
-    );
+    for (const path of pagesToRevalidate) {
+      revalidatePath(path, 'layout');
+    }
 
     return NextResponse.json({
       success: true,
       timestamp: new Date().toISOString(),
-      revalidated: results.map(r => r.status === 'fulfilled' ? r.value : { error: 'failed' }),
+      revalidated: pagesToRevalidate,
     });
   } catch (error) {
     console.error('Cron job failed:', error);

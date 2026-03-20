@@ -74,6 +74,12 @@ export default function Header() {
             </div>
 
             <Link
+              href="/check-your-numbers"
+              className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              Check Numbers
+            </Link>
+            <Link
               href="/number-generator"
               className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
@@ -123,6 +129,9 @@ export default function Header() {
               </Link>
             ))}
             <div className="border-t border-gray-100 dark:border-gray-800 mt-2 pt-2">
+              <Link href="/check-your-numbers" className="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>
+                Check Your Numbers
+              </Link>
               <Link href="/number-generator" className="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>
                 Number Generator
               </Link>

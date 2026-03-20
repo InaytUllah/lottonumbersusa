@@ -6,6 +6,12 @@ import JsonLd, { getBreadcrumbSchema, getFAQSchema } from '@/components/JsonLd';
 import { getLatestResult, fetchPastResults, formatDate, formatShortDate } from '@/lib/api/lottery-api';
 import { MEGA_MILLIONS } from '@/lib/data/games';
 import { getGameSEO } from '@/lib/data/seo';
+import CheckYourNumbers from '@/components/CheckYourNumbers';
+import PrizeBreakdown from '@/components/PrizeBreakdown';
+import SocialShare from '@/components/SocialShare';
+import JackpotHistoryChart from '@/components/JackpotHistoryChart';
+import WatchDrawing from '@/components/WatchDrawing';
+import WinnerStories from '@/components/WinnerStories';
 
 export const revalidate = 300;
 
@@ -89,8 +95,16 @@ export default async function MegaMillionsPage() {
                 )}
               </div>
             )}
+            <div className="mt-4">
+              <SocialShare title={`Mega Millions Results for ${formatDate(latestResult.drawDate)}: ${latestResult.numbers.join(', ')} MB: ${latestResult.bonusBall}`} url="https://lottonumbersusa.com/mega-millions" />
+            </div>
           </div>
         )}
+      </div>
+
+      {/* Prize Breakdown */}
+      <div className="mb-8">
+        <PrizeBreakdown game="mega-millions" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -136,7 +150,23 @@ export default async function MegaMillionsPage() {
           </div>
         </div>
 
+        {/* Sidebar */}
         <div className="space-y-6">
+          {/* Check Your Numbers */}
+          {latestResult && (
+            <CheckYourNumbers
+              gameSlug="mega-millions"
+              latestNumbers={latestResult.numbers}
+              latestBonus={latestResult.bonusBall}
+            />
+          )}
+
+          {/* Jackpot History Chart */}
+          <JackpotHistoryChart game="mega-millions" />
+
+          {/* Watch the Drawing */}
+          <WatchDrawing game="mega-millions" />
+
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
             <h3 className="font-bold text-gray-900 dark:text-white mb-3">About Mega Millions</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{MEGA_MILLIONS.description}</p>
@@ -171,12 +201,19 @@ export default async function MegaMillionsPage() {
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
             <h3 className="font-bold text-gray-900 dark:text-white mb-3">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link href="/number-generator" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Number Generator</Link></li>
-              <li><Link href="/number-frequency" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Number Frequency</Link></li>
+              <li><Link href="/number-generator" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Mega Millions Number Generator</Link></li>
+              <li><Link href="/number-frequency" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Mega Millions Number Frequency</Link></li>
               <li><Link href="/powerball" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Powerball Results</Link></li>
+              <li><Link href="/odds-calculator" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Lottery Odds Calculator</Link></li>
+              <li><Link href="/jackpot-tracker" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Current Jackpots</Link></li>
             </ul>
           </div>
         </div>
+      </div>
+
+      {/* Winner Stories */}
+      <div className="mt-8">
+        <WinnerStories />
       </div>
 
       {/* Deep SEO Content */}
@@ -185,7 +222,7 @@ export default async function MegaMillionsPage() {
         <p>
           Check the latest Mega Millions winning numbers right here at LottoNumbersUSA.com. Mega Millions draws take
           place every Tuesday and Friday at 11:00 PM ET. Our results are updated within minutes of the official draw,
-          so you can quickly check if you are a winner. Mega Millions is one of America's two biggest lottery games,
+          so you can quickly check if you are a winner. Mega Millions is one of America&#39;s two biggest lottery games,
           offering jackpots that frequently climb into the hundreds of millions of dollars.
         </p>
         <p>

@@ -65,3 +65,13 @@ a, button, input, select, textarea,
 ::-webkit-scrollbar-thumb:hover {
   background: #64748b;
 }
+
+/* Responsible Gaming popup progress bar */
+@keyframes shrinkBar {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.animate-shrink-bar {
+  animation: shrinkBar 10s linear forwards;
+}

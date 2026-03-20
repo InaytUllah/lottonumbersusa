@@ -9,7 +9,12 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-      <div className="text-8xl font-bold text-gray-200 dark:text-gray-700 mb-4">404</div>
+      {/* Fun lottery ball 404 */}
+      <div className="flex items-center justify-center gap-3 mb-6">
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gray-500 to-gray-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg">4</div>
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg">0</div>
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gray-500 to-gray-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg">4</div>
+      </div>
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
         Page Not Found
       </h1>

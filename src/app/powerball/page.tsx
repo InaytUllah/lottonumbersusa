@@ -6,6 +6,12 @@ import JsonLd, { getBreadcrumbSchema, getFAQSchema } from '@/components/JsonLd';
 import { getLatestResult, fetchPastResults, formatDate, formatShortDate } from '@/lib/api/lottery-api';
 import { POWERBALL } from '@/lib/data/games';
 import { getGameSEO } from '@/lib/data/seo';
+import CheckYourNumbers from '@/components/CheckYourNumbers';
+import PrizeBreakdown from '@/components/PrizeBreakdown';
+import SocialShare from '@/components/SocialShare';
+import JackpotHistoryChart from '@/components/JackpotHistoryChart';
+import WatchDrawing from '@/components/WatchDrawing';
+import WinnerStories from '@/components/WinnerStories';
 
 export const revalidate = 300;
 
@@ -81,8 +87,16 @@ export default async function PowerballPage() {
                 )}
               </div>
             )}
+            <div className="mt-4">
+              <SocialShare title={`Powerball Results for ${formatDate(latestResult.drawDate)}: ${latestResult.numbers.join(', ')} PB: ${latestResult.bonusBall}`} url="https://lottonumbersusa.com/powerball" />
+            </div>
           </div>
         )}
+      </div>
+
+      {/* Prize Breakdown */}
+      <div className="mb-8">
+        <PrizeBreakdown game="powerball" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -130,6 +144,21 @@ export default async function PowerballPage() {
 
         {/* Sidebar */}
         <div className="space-y-6">
+          {/* Check Your Numbers */}
+          {latestResult && (
+            <CheckYourNumbers
+              gameSlug="powerball"
+              latestNumbers={latestResult.numbers}
+              latestBonus={latestResult.bonusBall}
+            />
+          )}
+
+          {/* Jackpot History Chart */}
+          <JackpotHistoryChart game="powerball" />
+
+          {/* Watch the Drawing */}
+          <WatchDrawing game="powerball" />
+
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
             <h3 className="font-bold text-gray-900 dark:text-white mb-3">About Powerball</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{POWERBALL.description}</p>
@@ -177,6 +206,11 @@ export default async function PowerballPage() {
             </ul>
           </div>
         </div>
+      </div>
+
+      {/* Winner Stories */}
+      <div className="mt-8">
+        <WinnerStories />
       </div>
 
       {/* Deep SEO Content */}
