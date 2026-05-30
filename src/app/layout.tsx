@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import ResponsibleGamingPopup from '@/components/ResponsibleGamingPopup';
 import JsonLd, { getOrganizationSchema, getWebSiteSchema } from '@/components/JsonLd';
 import './globals.css';
 
@@ -119,7 +118,6 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
-        <ResponsibleGamingPopup />
       </body>
     </html>
   );

@@ -4,7 +4,6 @@ import Countdown from '@/components/Countdown';
 import { getLatestResult } from '@/lib/api/lottery-api';
 import { POWERBALL, MEGA_MILLIONS } from '@/lib/data/games';
 
-export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: 'Jackpot Tracker - All Current US Lottery Jackpots',
@@ -79,13 +78,15 @@ export default async function JackpotTrackerPage() {
         ))}
       </div>
 
-      <section className="prose dark:prose-invert max-w-none">
-        <h2>US Lottery Jackpots</h2>
-        <p>
-          Track all current US lottery jackpots in real-time. Our jackpot tracker shows the latest estimated
-          jackpot amounts for Powerball, Mega Millions, and state lottery games. Jackpot amounts are updated
-          after every draw and when official estimates change.
-        </p>
+      <section className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 sm:p-8">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">US Lottery Jackpots</h2>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            Track all current US lottery jackpots in real-time. Our jackpot tracker shows the latest estimated
+            jackpot amounts for <strong className="text-gray-900 dark:text-white">Powerball</strong>, <strong className="text-gray-900 dark:text-white">Mega Millions</strong>, and state lottery games. Jackpot amounts are updated
+            after every draw and when official estimates change.
+          </p>
+        </div>
       </section>
     </div>
   );

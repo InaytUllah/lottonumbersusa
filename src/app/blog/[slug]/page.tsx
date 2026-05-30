@@ -6,6 +6,21 @@ import { fetchPastResults, formatDate } from '@/lib/api/lottery-api';
 import { POWERBALL, MEGA_MILLIONS } from '@/lib/data/games';
 import { notFound } from 'next/navigation';
 
+// Static export: enumerate all blog post slugs at build time. Slugs
+// outside this set return 404 (no on-demand generation in static export).
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const [pbResults, mmResults] = await Promise.all([
+    fetchPastResults('powerball', 20),
+    fetchPastResults('mega-millions', 20),
+  ]);
+  return [
+    ...pbResults.map(r => ({ slug: `powerball-results-${r.drawDate}` })),
+    ...mmResults.map(r => ({ slug: `mega-millions-results-${r.drawDate}` })),
+  ];
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
@@ -135,31 +150,33 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
 
         {/* Article Content */}
-        <div className="prose dark:prose-invert max-w-none">
-          <p>
-            The {post.game} drawing held on {formatDate(post.date)} produced the winning numbers{' '}
-            <strong>{post.numbers.join(', ')}</strong> with {gameConfig.bonusBallName}{' '}
-            <strong>{post.bonusBall}</strong>.
-            {post.multiplier ? ` The ${gameConfig.multiplierName} was ${post.multiplier}x.` : ''}
-          </p>
-          <p>
-            {post.game} drawings take place {gameConfig.drawDays.join(', ')} at {gameConfig.drawTime}.
-            Players pick {gameConfig.mainNumbers} numbers from {gameConfig.mainRange[0]} to {gameConfig.mainRange[1]},
-            plus one {gameConfig.bonusBallName} from {gameConfig.bonusRange?.[0]} to {gameConfig.bonusRange?.[1]}.
-            Check your tickets against these numbers to see if you have won a prize.
-          </p>
-          <h2>How to Check Your {post.game} Ticket</h2>
-          <p>
-            Compare the numbers on your ticket with the winning numbers above. You need to match all{' '}
-            {gameConfig.mainNumbers} white balls plus the {gameConfig.bonusBallName} to win the jackpot.
-            However, there are {Object.keys(gameConfig.odds).length} prize tiers in total, so you may have won
-            a smaller prize even if you did not match all numbers.
-          </p>
-          <p>
-            View the <Link href={`/${post.gameSlug}`}>full {post.game} results history</Link>, check
-            our <Link href="/number-frequency">number frequency analysis</Link>, or generate your next set of
-            numbers with our <Link href="/number-generator">free number generator</Link>.
-          </p>
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 sm:p-8">
+          <div className="space-y-6">
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+              The <strong className="text-gray-900 dark:text-white">{post.game}</strong> drawing held on {formatDate(post.date)} produced the winning numbers{' '}
+              <strong className="text-gray-900 dark:text-white">{post.numbers.join(', ')}</strong> with {gameConfig.bonusBallName}{' '}
+              <strong className="text-gray-900 dark:text-white">{post.bonusBall}</strong>.
+              {post.multiplier ? ` The ${gameConfig.multiplierName} was ${post.multiplier}x.` : ''}
+            </p>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
+              <strong className="text-gray-900 dark:text-white">{post.game}</strong> drawings take place {gameConfig.drawDays.join(', ')} at {gameConfig.drawTime}.
+              Players pick {gameConfig.mainNumbers} numbers from {gameConfig.mainRange[0]} to {gameConfig.mainRange[1]},
+              plus one {gameConfig.bonusBallName} from {gameConfig.bonusRange?.[0]} to {gameConfig.bonusRange?.[1]}.
+              Check your tickets against these numbers to see if you have won a prize.
+            </p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">How to Check Your {post.game} Ticket</h2>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+              Compare the numbers on your ticket with the winning numbers above. You need to match all{' '}
+              {gameConfig.mainNumbers} white balls plus the {gameConfig.bonusBallName} to win the jackpot.
+              However, there are <strong className="text-gray-900 dark:text-white">{Object.keys(gameConfig.odds).length} prize tiers</strong> in total, so you may have won
+              a smaller prize even if you did not match all numbers.
+            </p>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
+              View the <Link href={`/${post.gameSlug}`} className="text-blue-600 dark:text-blue-400 hover:underline font-medium">full {post.game} results history</Link>, check
+              our <Link href="/number-frequency" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">number frequency analysis</Link>, or generate your next set of
+              numbers with our <Link href="/number-generator" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">free number generator</Link>.
+            </p>
+          </div>
         </div>
 
         {/* Navigation */}

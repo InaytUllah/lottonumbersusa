@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { fetchPastResults } from '@/lib/api/lottery-api';
 
-export const revalidate = 3600; // 1 hour
 
 export const metadata: Metadata = {
   title: 'Number Frequency Analysis - Hot & Cold Lottery Numbers',
@@ -180,13 +179,15 @@ export default async function NumberFrequencyPage() {
         </div>
       </section>
 
-      <section className="prose dark:prose-invert max-w-none">
-        <h2>Lottery Number Frequency Analysis</h2>
-        <p>
-          Our number frequency analysis shows how often each number has been drawn in recent Powerball and
-          Mega Millions draws. Hot numbers are those drawn most frequently, while cold numbers appear less often.
-          While past frequency does not predict future draws, many players use this data to inform their number selections.
-        </p>
+      <section className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 sm:p-8">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Lottery Number Frequency Analysis</h2>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            Our number frequency analysis shows how often each number has been drawn in recent <strong className="text-gray-900 dark:text-white">Powerball</strong> and
+            <strong className="text-gray-900 dark:text-white"> Mega Millions</strong> draws. Hot numbers are those drawn most frequently, while cold numbers appear less often.
+            While past frequency does not predict future draws, many players use this data to inform their number selections.
+          </p>
+        </div>
       </section>
     </div>
   );

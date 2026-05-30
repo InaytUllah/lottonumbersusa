@@ -41,32 +41,34 @@ export default function NumberGeneratorPage() {
       <NumberGeneratorClient />
 
       {/* SSR-visible SEO content - visible to search engine bots */}
-      <section className="mt-12 prose dark:prose-invert max-w-none">
-        <h2>About Our Lottery Number Generator</h2>
-        <p>
-          Use our free lottery number generator to pick random numbers for any US lottery game including{' '}
-          <Link href="/powerball">Powerball</Link>, <Link href="/mega-millions">Mega Millions</Link>,
-          SuperLotto Plus, Lotto Texas, Florida Lotto, and dozens more. Numbers are generated using a random
-          algorithm ensuring fair and unbiased results.
-        </p>
-        <p>
-          Each number within the valid range has an equal probability of being chosen. Our generator respects
-          the exact rules of each game — the correct number count, number range, and bonus ball rules are all
-          built in automatically when you select your game.
-        </p>
-        <h3>How It Works</h3>
-        <p>
-          Select your lottery game from the dropdown menu, choose how many lines you want to generate (1 to 20),
-          and click &quot;Generate Numbers.&quot; The generator instantly creates random combinations following the
-          exact format of your chosen game. For games with bonus balls (like the red Powerball or
-          Mega Ball), those are generated separately from the correct bonus number pool.
-        </p>
-        <h3>Supported Games</h3>
-        <p>
-          We support all major US lottery games including national games (Powerball and Mega Millions) and
-          state-specific games from California, Texas, Florida, New York, Pennsylvania, Ohio, Georgia, Michigan,
-          North Carolina, and New Jersey. Each game uses its official number ranges and rules.
-        </p>
+      <section className="mt-12 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 sm:p-8">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">About Our Lottery Number Generator</h2>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            Use our free lottery number generator to pick random numbers for any US lottery game including{' '}
+            <Link href="/powerball" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Powerball</Link>, <Link href="/mega-millions" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Mega Millions</Link>,
+            <strong className="text-gray-900 dark:text-white">SuperLotto Plus</strong>, <strong className="text-gray-900 dark:text-white">Lotto Texas</strong>, <strong className="text-gray-900 dark:text-white">Florida Lotto</strong>, and dozens more. Numbers are generated using a random
+            algorithm ensuring fair and unbiased results.
+          </p>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
+            Each number within the valid range has an equal probability of being chosen. Our generator respects
+            the exact rules of each game — the correct number count, number range, and bonus ball rules are all
+            built in automatically when you select your game.
+          </p>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">How It Works</h3>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            Select your lottery game from the dropdown menu, choose how many lines you want to generate (1 to 20),
+            and click &quot;Generate Numbers.&quot; The generator instantly creates random combinations following the
+            exact format of your chosen game. For games with bonus balls (like the red <strong className="text-gray-900 dark:text-white">Powerball</strong> or
+            <strong className="text-gray-900 dark:text-white">Mega Ball</strong>), those are generated separately from the correct bonus number pool.
+          </p>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Supported Games</h3>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            We support all major US lottery games including national games (<strong className="text-gray-900 dark:text-white">Powerball</strong> and <strong className="text-gray-900 dark:text-white">Mega Millions</strong>) and
+            state-specific games from California, Texas, Florida, New York, Pennsylvania, Ohio, Georgia, Michigan,
+            North Carolina, and New Jersey. Each game uses its official number ranges and rules.
+          </p>
+        </div>
       </section>
 
       {/* FAQ */}

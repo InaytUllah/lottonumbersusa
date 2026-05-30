@@ -4,7 +4,7 @@ import JsonLd, { getBreadcrumbSchema } from '@/components/JsonLd';
 
 export const metadata: Metadata = {
   title: 'About Us - Lotto Numbers USA',
-  description: 'Learn about LottoNumbersUSA.com, your trusted source for the latest US lottery results. Free lottery results, tools, and analysis for Powerball, Mega Millions, and state lotteries.',
+  description: 'LottoNumbersUSA.com pulls lottery results from official state data feeds. Powerball, Mega Millions, and 40+ state games. Free, no registration.',
 };
 
 export default function AboutPage() {
@@ -25,41 +25,36 @@ export default function AboutPage() {
         <h1>About Lotto Numbers USA</h1>
 
         <p>
-          LottoNumbersUSA.com is a free, independent lottery results website dedicated to providing the most accurate and up-to-date US lottery winning numbers. We cover Powerball, Mega Millions, and lottery games from all major US states.
+          We built this site because checking lottery numbers shouldn&apos;t require clicking through five different state websites. LottoNumbersUSA.com pulls results from official state lottery data feeds and puts them in one place. Powerball, Mega Millions, and 40+ state games across 10 states. No registration, no app download, no paywall.
         </p>
 
-        <h2>Our Mission</h2>
-        <p>
-          Our mission is simple: make it easy for anyone to check their lottery numbers quickly and reliably. We believe lottery results should be free, fast, and accessible to everyone without requiring registration or downloads.
-        </p>
-
-        <h2>What We Offer</h2>
+        <h2>What you get</h2>
         <ul>
-          <li><strong>Instant Results:</strong> Lottery winning numbers are updated automatically within minutes of each official draw</li>
-          <li><strong>Complete Coverage:</strong> Powerball, Mega Millions, and 40+ state-specific lottery games across 10 major US states</li>
-          <li><strong>Free Tools:</strong> Number generator, odds calculator, frequency analysis, and jackpot tracker</li>
-          <li><strong>Historical Data:</strong> Full results archive so you can look up past drawings</li>
-          <li><strong>Mobile Friendly:</strong> Optimized for checking results on your phone</li>
+          <li>Results updated within minutes of each draw, automatically</li>
+          <li>Powerball, Mega Millions, and state games from California, Texas, Florida, New York, Pennsylvania, Ohio, Georgia, Michigan, North Carolina, and New Jersey</li>
+          <li>Number generator, odds calculator, frequency charts, and a jackpot tracker</li>
+          <li>Past results archive going back hundreds of draws</li>
+          <li>Works on your phone without squinting</li>
         </ul>
 
-        <h2>How Our Data Works</h2>
+        <h2>Where the data comes from</h2>
         <p>
-          We source our lottery results from official public data APIs provided by state lottery commissions. Our automated systems check for new results multiple times per hour to ensure you always see the latest winning numbers. All results are unofficial — always verify with your state lottery before claiming prizes.
+          Results come from official public data APIs run by state lottery commissions (like New York&apos;s Open Data portal). Our system checks for new draws multiple times per hour. When a new draw posts, the site updates within minutes. We recommend double-checking with your state lottery before claiming anything large.
         </p>
 
-        <h2>States We Cover</h2>
+        <h2>States we cover</h2>
         <p>
-          We currently provide results for lottery games in California, Texas, Florida, New York, Pennsylvania, Ohio, Georgia, Michigan, North Carolina, and New Jersey. We are continuously expanding our coverage to include more states.
+          Right now: California, Texas, Florida, New York, Pennsylvania, Ohio, Georgia, Michigan, North Carolina, and New Jersey. More states are being added over time.
         </p>
 
-        <h2>Responsible Gaming</h2>
+        <h2>A note on playing</h2>
         <p>
-          We take responsible gaming seriously. Lottery games are a form of entertainment, not an investment strategy. Please play within your means. If you or someone you know has a gambling problem, call 1-800-522-4700 for confidential help.
+          Lottery tickets are entertainment, not a retirement plan. The odds are not in your favor. Play what you can afford to lose and leave it at that.
         </p>
 
-        <h2>Contact Us</h2>
+        <h2>Get in touch</h2>
         <p>
-          Have a question, suggestion, or found an error? Visit our <Link href="/contact">Contact page</Link> to get in touch. We value feedback from our users and are always working to improve our service.
+          Found a wrong number? Have a suggestion? Visit the <Link href="/contact">contact page</Link>. We read everything.
         </p>
       </article>
     </div>

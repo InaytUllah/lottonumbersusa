@@ -1,30 +1,14 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
+// Static export for Cloudflare Pages. Security headers were moved to
+// `public/_headers` and the slug redirects to `public/_redirects` —
+// next.config.ts no longer supports headers()/redirects() under
+// output: 'export'. The www → non-www and *.vercel.app redirects are
+// dropped (handled at the DNS/Cloudflare layer once migrated).
 const nextConfig: NextConfig = {
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-        ],
-      },
-    ];
-  },
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.lottonumbersusa.com' }],
-        destination: 'https://lottonumbersusa.com/:path*',
-        permanent: true,
-      },
-    ];
-  },
+  output: 'export',
+  images: { unoptimized: true },
+  trailingSlash: true,
 };
 
 export default nextConfig;

@@ -1,0 +1,7 @@
+# Cloudflare Pages wrangler.toml (Pages-specific format, not Workers).
+# Required field for Pages: pages_build_output_dir
+# https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+
+name = "lottonumbersusa"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "./out"

@@ -5,7 +5,6 @@ import CheckYourNumbers from '@/components/CheckYourNumbers';
 import { getLatestResult, formatDate } from '@/lib/api/lottery-api';
 import LotteryBalls from '@/components/LotteryBalls';
 
-export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: 'Check Your Lottery Numbers - Did You Win Powerball or Mega Millions?',
@@ -116,34 +115,36 @@ export default async function CheckYourNumbersPage() {
       </div>
 
       {/* SEO Content */}
-      <section className="prose dark:prose-invert max-w-none mb-10">
-        <h2>Free Lottery Number Checker</h2>
-        <p>
-          Use our free lottery number checker to instantly verify your Powerball and Mega Millions tickets.
-          Simply enter the numbers from your ticket and our system will compare them against the latest
-          official drawing results. You will see exactly how many numbers you matched, whether you hit
-          the bonus ball, and what prize tier you fall into.
-        </p>
-        <p>
-          Our checker is updated within minutes of every official draw. Powerball drawings happen every
-          Monday, Wednesday, and Saturday at 10:59 PM ET. Mega Millions drawings happen every Tuesday
-          and Friday at 11:00 PM ET. Bookmark this page so you can quickly check your numbers after
-          every drawing.
-        </p>
-        <h3>Understanding Your Results</h3>
-        <p>
-          Both Powerball and Mega Millions have 9 prize tiers. You do not need to match all numbers to
-          win. Even matching just the bonus ball (Powerball or Mega Ball) wins you a prize. The more
-          numbers you match, the larger your prize. If you add Power Play (Powerball) or Megaplier
-          (Mega Millions) to your ticket, your non-jackpot prizes are multiplied.
-        </p>
-        <h3>What to Do If You Win</h3>
-        <p>
-          If our checker shows you have won, congratulations! Sign the back of your ticket immediately
-          and store it in a safe place. For prizes under $600, you can typically claim at any authorized
-          retailer. For larger prizes, visit your state lottery office. For jackpot wins, consider
-          consulting a financial advisor and attorney before claiming your prize.
-        </p>
+      <section className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 sm:p-8 mb-10">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Free Lottery Number Checker</h2>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            Use our free lottery number checker to instantly verify your <strong className="text-gray-900 dark:text-white">Powerball</strong> and <strong className="text-gray-900 dark:text-white">Mega Millions</strong> tickets.
+            Simply enter the numbers from your ticket and our system will compare them against the latest
+            official drawing results. You will see exactly how many numbers you matched, whether you hit
+            the bonus ball, and what prize tier you fall into.
+          </p>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
+            Our checker is updated within minutes of every official draw. <strong className="text-gray-900 dark:text-white">Powerball</strong> drawings happen every
+            Monday, Wednesday, and Saturday at 10:59 PM ET. <strong className="text-gray-900 dark:text-white">Mega Millions</strong> drawings happen every Tuesday
+            and Friday at 11:00 PM ET. Bookmark this page so you can quickly check your numbers after
+            every drawing.
+          </p>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Understanding Your Results</h3>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            Both <strong className="text-gray-900 dark:text-white">Powerball</strong> and <strong className="text-gray-900 dark:text-white">Mega Millions</strong> have <strong className="text-gray-900 dark:text-white">9 prize tiers</strong>. You do not need to match all numbers to
+            win. Even matching just the bonus ball (Powerball or Mega Ball) wins you a prize. The more
+            numbers you match, the larger your prize. If you add <strong className="text-gray-900 dark:text-white">Power Play</strong> (Powerball) or <strong className="text-gray-900 dark:text-white">Megaplier</strong>
+            (Mega Millions) to your ticket, your non-jackpot prizes are multiplied.
+          </p>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">What to Do If You Win</h3>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            If our checker shows you have won, congratulations! Sign the back of your ticket immediately
+            and store it in a safe place. For prizes under $600, you can typically claim at any authorized
+            retailer. For larger prizes, visit your state lottery office. For jackpot wins, consider
+            consulting a financial advisor and attorney before claiming your prize.
+          </p>
+        </div>
       </section>
 
       {/* FAQ Section */}

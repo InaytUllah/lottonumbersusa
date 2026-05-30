@@ -5,8 +5,8 @@ const SITE_URL = 'https://lottonumbersusa.com';
 
 export function getHomeSEO(): SEOData {
   return {
-    title: 'Lotto Numbers USA - Latest Powerball, Mega Millions & State Lottery Results',
-    description: 'Check the latest US lottery results for Powerball, Mega Millions, and 40+ state lottery games. Winning numbers updated instantly after every draw. Free number generator, odds calculator, and jackpot tracker.',
+    title: 'Lottery Results Today: Powerball, Mega Millions & State Winning Numbers',
+    description: 'Latest US lottery results updated after every draw. Powerball, Mega Millions, and 40+ state lottery winning numbers from official data feeds. Free ticket checker, odds calculator, and jackpot tracker.',
     canonical: SITE_URL,
   };
 }

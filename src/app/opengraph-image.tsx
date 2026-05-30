@@ -1,5 +1,7 @@
 import { ImageResponse } from 'next/og';
 
+// Required under output: 'export' so /opengraph-image.png is emitted as a static file.
+export const dynamic = 'force-static';
 export const alt = 'Lotto Numbers USA - Latest US Lottery Results';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';

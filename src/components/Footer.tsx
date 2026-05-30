@@ -65,8 +65,19 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Responsible Gaming */}
+        {/* Our Network */}
         <div className="border-t border-gray-800 mt-10 pt-8">
+          <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Our Lottery Network</h3>
+          <div className="flex flex-wrap gap-3">
+            <a href="https://uk49sresults.co.uk" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-full transition-colors">🇬🇧 UK 49s Results</a>
+            <a href="https://euromillionsresults.co.uk" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-full transition-colors">🇪🇺 Euro Lotto Results</a>
+            <a href="https://oz-lotto-results.com" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-full transition-colors">🇦🇺 AU Lotto Results</a>
+            <a href="https://lotterycalculators.com" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-full transition-colors">🧮 Lottery Calculators</a>
+          </div>
+        </div>
+
+        {/* Responsible Gaming */}
+        <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-500">
               &copy; {new Date().getFullYear()} LottoNumbersUSA.com. All rights reserved. Not affiliated with any state or national lottery organization.

@@ -1,69 +1,164 @@
 import { LotteryResult } from '../types';
 
 const RESULTS_CACHE = new Map<string, { data: LotteryResult; timestamp: number }>();
+const PAST_RESULTS_CACHE = new Map<string, { data: LotteryResult[]; timestamp: number }>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 // ============================================
-// PRIMARY: Fetch from free lottery APIs
+// API ENDPOINTS (NY Open Data — free, no key needed)
+// ============================================
+// Powerball: winning_numbers = "07 24 37 42 57 05" (5 main + powerball in one string)
+//            multiplier = "2"
+// Mega Millions: winning_numbers = "05 15 22 33 37" (5 main only)
+//                mega_ball = "02" (SEPARATE field)
+//                multiplier = NOT present in API
+
+const ENDPOINTS: Record<string, string> = {
+  // National games
+  powerball: 'https://data.ny.gov/resource/d6yy-54nr.json',
+  'mega-millions': 'https://data.ny.gov/resource/5xaw-6ayf.json',
+  // New York state games (free NY Open Data APIs)
+  'new-york-lotto': 'https://data.ny.gov/resource/6nbc-h7bj.json',
+  'take-5': 'https://data.ny.gov/resource/dg63-4siq.json',
+  'numbers': 'https://data.ny.gov/resource/hsys-3def.json',
+  'win-4': 'https://data.ny.gov/resource/hsys-3def.json',
+};
+
+// ============================================
+// Parse a single draw from API response
 // ============================================
 
-// Lottery results API (free, no key needed for basic usage)
+function parseDraw(game: string, draw: Record<string, string>): LotteryResult | null {
+  if (!draw.draw_date) return null;
+  // Numbers and Win 4 don't have winning_numbers field — they use separate fields
+  // Some games use different field names — skip this check for those
+  const noWinningNumbersField = ['numbers', 'win-4', 'numbers-win4', 'take-5'];
+  if (!draw.winning_numbers && !noWinningNumbersField.includes(game)) return null;
+
+  const drawDate = draw.draw_date.split('T')[0];
+
+  if (game === 'powerball') {
+    // Powerball: all 6 numbers in winning_numbers string
+    const allNumbers = draw.winning_numbers.split(' ').map(Number);
+    if (allNumbers.length < 6) return null;
+
+    return {
+      game: 'Powerball',
+      gameSlug: 'powerball',
+      drawDate,
+      numbers: allNumbers.slice(0, 5),
+      bonusBall: allNumbers[5],
+      bonusBallName: 'Powerball',
+      multiplier: draw.multiplier ? Number(draw.multiplier) : undefined,
+      multiplierName: 'Power Play',
+    };
+  }
+
+  if (game === 'mega-millions') {
+    // Mega Millions: 5 main numbers in winning_numbers, mega_ball is SEPARATE
+    const mainNumbers = draw.winning_numbers.split(' ').map(Number);
+    if (mainNumbers.length < 5) return null;
+
+    const megaBall = draw.mega_ball ? Number(draw.mega_ball) : undefined;
+
+    return {
+      game: 'Mega Millions',
+      gameSlug: 'mega-millions',
+      drawDate,
+      numbers: mainNumbers.slice(0, 5),
+      bonusBall: megaBall,
+      bonusBallName: 'Mega Ball',
+      multiplier: undefined,
+      multiplierName: 'Megaplier',
+    };
+  }
+
+  // NY Lotto: winning_numbers = "31 35 36 38 49 55", bonus = "10"
+  if (game === 'new-york-lotto') {
+    const allNumbers = draw.winning_numbers.split(' ').map(Number);
+    if (allNumbers.length < 6) return null;
+
+    return {
+      game: 'New York Lotto',
+      gameSlug: 'new-york-lotto',
+      drawDate,
+      numbers: allNumbers.slice(0, 6),
+      bonusBall: draw.bonus ? Number(draw.bonus) : undefined,
+      bonusBallName: 'Bonus',
+    };
+  }
+
+  // Take 5: has midday and evening draws
+  // evening_winning_numbers = "10 14 15 17 18", midday_winning_numbers = "10 20 21 28 39"
+  if (game === 'take-5') {
+    // Prefer evening draw, fall back to midday
+    const numbersStr = draw.evening_winning_numbers || draw.midday_winning_numbers;
+    if (!numbersStr) return null;
+    const nums = numbersStr.split(' ').map(Number);
+    if (nums.length < 5) return null;
+
+    return {
+      game: 'Take 5',
+      gameSlug: 'take-5',
+      drawDate,
+      numbers: nums.slice(0, 5),
+    };
+  }
+
+  // Numbers (3-digit) — from combined Numbers/Win4 dataset
+  if (game === 'numbers' || game === 'numbers-win4') {
+    const eveningDaily = draw.evening_daily;
+    if (!eveningDaily) return null;
+
+    return {
+      game: 'Numbers',
+      gameSlug: 'numbers',
+      drawDate,
+      numbers: eveningDaily.split('').map(Number),
+    };
+  }
+
+  // Win 4 (4-digit) — from combined Numbers/Win4 dataset
+  if (game === 'win-4') {
+    const eveningWin4 = draw.evening_win_4;
+    if (!eveningWin4) return null;
+
+    return {
+      game: 'Win 4',
+      gameSlug: 'win-4',
+      drawDate,
+      numbers: eveningWin4.split('').map(Number),
+    };
+  }
+
+  return null;
+}
+
+// ============================================
+// Fetch latest result from API
+// ============================================
+
 async function fetchFromLotteryAPI(game: string): Promise<LotteryResult | null> {
   try {
-    // Using a public lottery data endpoint
-    const endpoints: Record<string, string> = {
-      powerball: 'https://data.ny.gov/resource/d6yy-54nr.json?$limit=1&$order=draw_date%20DESC',
-      'mega-millions': 'https://data.ny.gov/resource/5xaw-6ayf.json?$limit=1&$order=draw_date%20DESC',
-    };
+    const baseUrl = ENDPOINTS[game];
+    if (!baseUrl) return null;
 
-    const url = endpoints[game];
-    if (!url) return null;
+    const url = `${baseUrl}?$limit=1&$order=draw_date%20DESC`;
 
     const response = await fetch(url, {
-      next: { revalidate: 300 }, // Cache for 5 min
+      next: { revalidate: 300 },
       headers: { Accept: 'application/json' },
     });
 
-    if (!response.ok) return null;
+    if (!response.ok) {
+      console.error(`API returned ${response.status} for ${game}`);
+      return null;
+    }
 
     const data = await response.json();
     if (!data || data.length === 0) return null;
 
-    const draw = data[0];
-
-    if (game === 'powerball') {
-      const numbers = draw.winning_numbers?.split(' ').map(Number) || [];
-      const mainNumbers = numbers.slice(0, 5);
-      const powerball = numbers[5];
-      return {
-        game: 'Powerball',
-        gameSlug: 'powerball',
-        drawDate: draw.draw_date?.split('T')[0] || '',
-        numbers: mainNumbers,
-        bonusBall: powerball,
-        bonusBallName: 'Powerball',
-        multiplier: draw.multiplier ? Number(draw.multiplier) : undefined,
-        multiplierName: 'Power Play',
-      };
-    }
-
-    if (game === 'mega-millions') {
-      const numbers = draw.winning_numbers?.split(' ').map(Number) || [];
-      const mainNumbers = numbers.slice(0, 5);
-      const megaBall = numbers[5];
-      return {
-        game: 'Mega Millions',
-        gameSlug: 'mega-millions',
-        drawDate: draw.draw_date?.split('T')[0] || '',
-        numbers: mainNumbers,
-        bonusBall: megaBall,
-        bonusBallName: 'Mega Ball',
-        multiplier: draw.mega_ball ? Number(draw.multiplier) : undefined,
-        multiplierName: 'Megaplier',
-      };
-    }
-
-    return null;
+    return parseDraw(game, data[0]);
   } catch (error) {
     console.error(`API fetch failed for ${game}:`, error);
     return null;
@@ -78,14 +173,18 @@ export async function fetchPastResults(
   game: string,
   limit: number = 10
 ): Promise<LotteryResult[]> {
-  try {
-    const endpoints: Record<string, string> = {
-      powerball: `https://data.ny.gov/resource/d6yy-54nr.json?$limit=${limit}&$order=draw_date%20DESC`,
-      'mega-millions': `https://data.ny.gov/resource/5xaw-6ayf.json?$limit=${limit}&$order=draw_date%20DESC`,
-    };
+  // Check cache
+  const cacheKey = `${game}-${limit}`;
+  const cached = PAST_RESULTS_CACHE.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data;
+  }
 
-    const url = endpoints[game];
-    if (!url) return [];
+  try {
+    const baseUrl = ENDPOINTS[game];
+    if (!baseUrl) return [];
+
+    const url = `${baseUrl}?$limit=${limit}&$order=draw_date%20DESC`;
 
     const response = await fetch(url, {
       next: { revalidate: 300 },
@@ -95,34 +194,12 @@ export async function fetchPastResults(
     if (!response.ok) return [];
 
     const data = await response.json();
+    const results = data
+      .map((draw: Record<string, string>) => parseDraw(game, draw))
+      .filter((r: LotteryResult | null): r is LotteryResult => r !== null);
 
-    return data.map((draw: Record<string, string>) => {
-      const numbers = draw.winning_numbers?.split(' ').map(Number) || [];
-
-      if (game === 'powerball') {
-        return {
-          game: 'Powerball',
-          gameSlug: 'powerball',
-          drawDate: draw.draw_date?.split('T')[0] || '',
-          numbers: numbers.slice(0, 5),
-          bonusBall: numbers[5],
-          bonusBallName: 'Powerball',
-          multiplier: draw.multiplier ? Number(draw.multiplier) : undefined,
-          multiplierName: 'Power Play',
-        };
-      }
-
-      return {
-        game: 'Mega Millions',
-        gameSlug: 'mega-millions',
-        drawDate: draw.draw_date?.split('T')[0] || '',
-        numbers: numbers.slice(0, 5),
-        bonusBall: numbers[5],
-        bonusBallName: 'Mega Ball',
-        multiplier: draw.multiplier ? Number(draw.multiplier) : undefined,
-        multiplierName: 'Megaplier',
-      };
-    });
+    PAST_RESULTS_CACHE.set(cacheKey, { data: results, timestamp: Date.now() });
+    return results;
   } catch (error) {
     console.error(`Failed to fetch past results for ${game}:`, error);
     return [];
@@ -130,83 +207,49 @@ export async function fetchPastResults(
 }
 
 // ============================================
-// MAIN: Get latest result (with caching)
+// MAIN: Get latest result with multi-layer fallback
+// 1. In-memory cache (5 min)
+// 2. Fresh API call
+// 3. Last-known-good from past-results cache
+// Only returns null if we genuinely have zero data — never shows broken UI.
 // ============================================
 
 export async function getLatestResult(gameSlug: string): Promise<LotteryResult | null> {
-  // Check cache
+  // Layer 1: In-memory cache
   const cached = RESULTS_CACHE.get(gameSlug);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
     return cached.data;
   }
 
-  // Try API first
+  // Layer 2: Fresh API call
   const result = await fetchFromLotteryAPI(gameSlug);
-
   if (result) {
     RESULTS_CACHE.set(gameSlug, { data: result, timestamp: Date.now() });
     return result;
   }
 
-  // Return sample data as fallback (for development/when APIs are down)
-  return getSampleResult(gameSlug);
-}
-
-// ============================================
-// Sample data for development & fallback
-// ============================================
-
-function getSampleResult(gameSlug: string): LotteryResult {
-  const today = new Date().toISOString().split('T')[0];
-
-  const samples: Record<string, LotteryResult> = {
-    powerball: {
-      game: 'Powerball',
-      gameSlug: 'powerball',
-      drawDate: today,
-      numbers: [7, 14, 33, 46, 59],
-      bonusBall: 12,
-      bonusBallName: 'Powerball',
-      multiplier: 3,
-      multiplierName: 'Power Play',
-      jackpot: '$284 Million',
-      nextJackpot: '$312 Million',
-      nextDrawDate: getNextDrawDate(['Monday', 'Wednesday', 'Saturday']),
-    },
-    'mega-millions': {
-      game: 'Mega Millions',
-      gameSlug: 'mega-millions',
-      drawDate: today,
-      numbers: [3, 21, 35, 52, 67],
-      bonusBall: 18,
-      bonusBallName: 'Mega Ball',
-      multiplier: 2,
-      multiplierName: 'Megaplier',
-      jackpot: '$415 Million',
-      nextJackpot: '$450 Million',
-      nextDrawDate: getNextDrawDate(['Tuesday', 'Friday']),
-    },
-  };
-
-  // Generate generic sample for state games
-  if (!samples[gameSlug]) {
-    return {
-      game: gameSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      gameSlug,
-      drawDate: today,
-      numbers: [5, 12, 23, 34, 41],
-      jackpot: '$50,000',
-    };
+  // Layer 3: Fall back to past-results cache
+  for (const [key, entry] of PAST_RESULTS_CACHE.entries()) {
+    if (key.startsWith(gameSlug + '-') && entry.data.length > 0) {
+      return entry.data[0];
+    }
   }
 
-  return samples[gameSlug];
+  // Layer 4: Try fetching past results as a last resort (they might succeed even if single-latest failed)
+  const past = await fetchPastResults(gameSlug, 1);
+  if (past.length > 0) {
+    RESULTS_CACHE.set(gameSlug, { data: past[0], timestamp: Date.now() });
+    return past[0];
+  }
+
+  return null;
 }
 
 // ============================================
 // Utility functions
 // ============================================
 
-function getNextDrawDate(drawDays: string[]): string {
+export function getNextDrawDate(drawDays: string[]): string {
   const dayMap: Record<string, number> = {
     Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3,
     Thursday: 4, Friday: 5, Saturday: 6,
@@ -245,4 +288,21 @@ export function formatShortDate(dateStr: string): string {
     day: 'numeric',
     year: 'numeric',
   });
+}
+
+/**
+ * Format a timestamp as relative time (e.g. "2 minutes ago")
+ */
+export function formatRelativeTime(timestamp: string | Date): string {
+  const now = new Date();
+  const then = new Date(timestamp);
+  const diffMs = now.getTime() - then.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+  return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
 }

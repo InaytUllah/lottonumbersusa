@@ -1,0 +1,58 @@
+# Cloudflare Pages redirects config (https://developers.cloudflare.com/pages/configuration/redirects/)
+# Replaces next.config.ts redirects() since static export doesn't support runtime redirects.
+# Format: <source>  <destination>  <status>
+#
+# Note: www → non-www and *.vercel.app → custom-domain redirects are handled
+# at the Cloudflare DNS/Page Rules layer, not here.
+
+# ============================================
+# Root-level state-game slugs → state/game pages
+# (Fixes 404s on URLs Google was indexing/expecting)
+# ============================================
+
+# Michigan
+/lotto-47        /michigan/lotto-47        308
+
+# Texas
+/lotto-texas     /texas/lotto-texas        308
+/texas-two-step  /texas/texas-two-step     308
+/cash-five       /texas/cash-five          308
+
+# Florida
+/florida-lotto   /florida/florida-lotto    308
+
+# California
+/superlotto-plus /california/superlotto-plus  308
+
+# New York
+/new-york-lotto  /new-york/new-york-lotto  308
+/take-5          /new-york/take-5          308
+/numbers         /new-york/numbers         308
+/win-4           /new-york/win-4           308
+
+# Ohio
+/classic-lotto   /ohio/classic-lotto       308
+/rolling-cash-5  /ohio/rolling-cash-5      308
+
+# Pennsylvania
+/cash-5          /pennsylvania/cash-5      308
+/match-6         /pennsylvania/match-6     308
+/treasure-hunt   /pennsylvania/treasure-hunt  308
+
+# Georgia
+/cash-3          /georgia/cash-3           308
+/cash-4          /georgia/cash-4           308
+/georgia-five    /georgia/georgia-five     308
+
+# New Jersey
+/jersey-cash-5   /new-jersey/jersey-cash-5  308
+/pick-6          /new-jersey/pick-6        308
+
+# Generic state-game slugs that exist in multiple states
+# — redirect to a search-style hub page on /states for now
+/fantasy-5       /states                   308
+/pick-3          /states                   308
+/pick-4          /states                   308
+/pick-5          /states                   308
+/daily-3         /states                   308
+/daily-4         /states                   308

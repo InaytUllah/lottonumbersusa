@@ -8,12 +8,13 @@ interface WinnerStory {
   game: string;
 }
 
+// Verified historical biggest US lottery jackpots (public record)
 const RECENT_WINNERS: WinnerStory[] = [
-  { headline: 'Florida man wins big with Quick Pick ticket', amount: '$842 Million', state: 'Florida', date: 'Jan 2024', game: 'Powerball' },
-  { headline: 'California couple claims massive Mega Millions prize', amount: '$1.128 Billion', state: 'California', date: 'Mar 2024', game: 'Mega Millions' },
-  { headline: 'Oregon player takes home Powerball jackpot', amount: '$1.3 Billion', state: 'Oregon', date: 'Apr 2024', game: 'Powerball' },
-  { headline: 'New Jersey syndicate splits massive win', amount: '$1.13 Billion', state: 'New Jersey', date: 'Mar 2024', game: 'Mega Millions' },
-  { headline: 'Texas player hits Powerball for huge prize', amount: '$935 Million', state: 'Texas', date: 'Dec 2023', game: 'Powerball' },
+  { headline: 'Largest Powerball jackpot ever won', amount: '$2.04 Billion', state: 'California', date: 'Nov 2022', game: 'Powerball' },
+  { headline: 'Record Mega Millions jackpot claimed', amount: '$1.537 Billion', state: 'South Carolina', date: 'Oct 2018', game: 'Mega Millions' },
+  { headline: 'Single ticket wins massive Mega Millions prize', amount: '$1.337 Billion', state: 'Illinois', date: 'Jul 2022', game: 'Mega Millions' },
+  { headline: 'Powerball jackpot claimed after months of rolls', amount: '$1.326 Billion', state: 'Oregon', date: 'Apr 2024', game: 'Powerball' },
+  { headline: 'Mega Millions jackpot won in Maine', amount: '$1.35 Billion', state: 'Maine', date: 'Jan 2023', game: 'Mega Millions' },
 ];
 
 export default function WinnerStories() {

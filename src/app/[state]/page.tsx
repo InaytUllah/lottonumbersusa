@@ -46,7 +46,7 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
           {state.name} Lottery Results
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400">
-          Latest winning numbers for all {state.name} lottery games
+          Browse all {state.name} lottery games and check results. Click any game below for the latest winning numbers.
         </p>
       </div>
 
@@ -135,30 +135,32 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
       </section>
 
       {/* SEO Content */}
-      <section className="mt-10 prose dark:prose-invert max-w-none">
-        <h2>{state.name} Lottery Winning Numbers</h2>
-        <p>
-          Check the latest {state.name} lottery results right here at LottoNumbersUSA.com. The {state.name} Lottery
-          offers {stateGames.length} state-specific {stateGames.length === 1 ? 'game' : 'games'}
-          {stateGames.length > 0 && <> including {stateGames.map(g => g.name).join(', ')}</>}, in addition to
-          national multi-state games like Powerball and Mega Millions. All {state.name} lottery results are updated
-          automatically after each official draw.
-        </p>
-        <h3>Playing the Lottery in {state.name}</h3>
-        <p>
-          {state.name} lottery players have access to a total of {state.games.length} games, ranging from daily
-          draw games to multi-state jackpot games. Whether you prefer the excitement of Powerball and Mega Millions
-          or the better odds offered by {state.name}&apos;s own state games, you can find all the latest winning
-          numbers and results on this page. Tickets can be purchased at authorized retailers throughout {state.name}.
-        </p>
-        <h3>About the {state.name} Lottery</h3>
-        <p>
-          The {state.name} Lottery is operated by the state and generates revenue that supports public programs
-          and services. Like all US state lotteries, the {state.name} Lottery is regulated to ensure fair play and
-          transparent results. Players must be at least 18 years old to purchase lottery tickets in {state.name}.
-          For official rules, prize claim deadlines, and retailer locations, visit the {state.name} Lottery&apos;s
-          official website at {state.officialSite.replace('https://', '')}.
-        </p>
+      <section className="mt-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 sm:p-8">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{state.name} Lottery Winning Numbers</h2>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            Check the latest {state.name} lottery results right here at <strong className="text-gray-900 dark:text-white">LottoNumbersUSA.com</strong>. The <strong className="text-gray-900 dark:text-white">{state.name} Lottery</strong>
+            {' '}offers {stateGames.length} state-specific {stateGames.length === 1 ? 'game' : 'games'}
+            {stateGames.length > 0 && <> including {stateGames.map(g => g.name).join(', ')}</>}, in addition to
+            national multi-state games like <strong className="text-gray-900 dark:text-white">Powerball</strong> and <strong className="text-gray-900 dark:text-white">Mega Millions</strong>. All {state.name} lottery results are updated
+            automatically after each official draw.
+          </p>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Playing the Lottery in {state.name}</h3>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            {state.name} lottery players have access to a total of <strong className="text-gray-900 dark:text-white">{state.games.length} games</strong>, ranging from daily
+            draw games to multi-state jackpot games. Whether you prefer the excitement of <strong className="text-gray-900 dark:text-white">Powerball</strong> and <strong className="text-gray-900 dark:text-white">Mega Millions</strong>
+            {' '}or the better odds offered by {state.name}&apos;s own state games, you can find all the latest winning
+            numbers and results on this page. Tickets can be purchased at authorized retailers throughout {state.name}.
+          </p>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">About the {state.name} Lottery</h3>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            The <strong className="text-gray-900 dark:text-white">{state.name} Lottery</strong> is operated by the state and generates revenue that supports public programs
+            and services. Like all US state lotteries, the {state.name} Lottery is regulated to ensure fair play and
+            transparent results. Players must be at least 18 years old to purchase lottery tickets in {state.name}.
+            For official rules, prize claim deadlines, and retailer locations, visit the {state.name} Lottery&apos;s
+            official website at {state.officialSite.replace('https://', '')}.
+          </p>
+        </div>
       </section>
     </div>
   );

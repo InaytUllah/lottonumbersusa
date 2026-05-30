@@ -26,7 +26,7 @@ export default function DisclaimerPage() {
 
         <h2>Accuracy of Results</h2>
         <p>
-          While we make every effort to ensure the accuracy and timeliness of lottery results displayed on this website, we cannot guarantee that the information is always complete, correct, or up-to-date. <strong>Lottery results displayed on this website are unofficial.</strong>
+          We make every effort to ensure accuracy and timeliness of lottery results by sourcing directly from official state lottery data feeds. Results are typically updated within minutes of each draw.
         </p>
         <p>
           <strong>Always verify your lottery numbers with your official state lottery commission before claiming any prize.</strong> Official results can be found on your state lottery&apos;s website.

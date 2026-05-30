@@ -12,8 +12,8 @@ import SocialShare from '@/components/SocialShare';
 import JackpotHistoryChart from '@/components/JackpotHistoryChart';
 import WatchDrawing from '@/components/WatchDrawing';
 import WinnerStories from '@/components/WinnerStories';
+import LastUpdated from '@/components/LastUpdated';
 
-export const revalidate = 300;
 
 const seo = getGameSEO('Powerball', 'powerball');
 export const metadata: Metadata = {
@@ -23,12 +23,12 @@ export const metadata: Metadata = {
 };
 
 const powerballFAQs = [
-  { question: 'What time is the Powerball drawing?', answer: 'Powerball drawings are held every Monday, Wednesday, and Saturday at 10:59 PM Eastern Time. Results are typically available on our site within 5 minutes of the draw.' },
-  { question: 'How much does a Powerball ticket cost?', answer: 'A standard Powerball ticket costs $2. You can add Power Play for an extra $1, which multiplies non-jackpot prizes by 2x, 3x, 4x, 5x, or 10x (10x only when jackpot is under $150 million).' },
-  { question: 'What are the odds of winning the Powerball jackpot?', answer: 'The odds of winning the Powerball jackpot are 1 in 292,201,338. The overall odds of winning any Powerball prize are approximately 1 in 24.87.' },
-  { question: 'How many numbers do you need to win Powerball?', answer: 'To win the Powerball jackpot, you must match all 5 white balls (1-69) plus the red Powerball (1-26). However, you can win smaller prizes by matching fewer numbers. Even matching just the Powerball wins you $4.' },
-  { question: 'What is the Power Play option?', answer: 'Power Play is an add-on feature for $1 extra per play. It multiplies non-jackpot prizes by 2x, 3x, 4x, 5x, or 10x. The Match 5 prize is always doubled to $2 million with Power Play, regardless of the multiplier drawn.' },
-  { question: 'How long do I have to claim a Powerball prize?', answer: 'Claim periods vary by state, ranging from 90 days to 1 year from the drawing date. Check with your state lottery for the exact deadline. Unclaimed prizes revert to the participating states.' },
+  { question: 'What time is the Powerball drawing?', answer: 'Monday, Wednesday, and Saturday at 10:59 PM Eastern. We usually post results within a few minutes.' },
+  { question: 'How much does a Powerball ticket cost?', answer: '$2 for a standard ticket. Power Play costs an extra $1 and multiplies non-jackpot prizes by 2x to 10x. The 10x multiplier only applies when the jackpot is under $150 million.' },
+  { question: 'What are the odds of winning the Powerball jackpot?', answer: '1 in 292,201,338 for the jackpot. Your overall odds of winning any prize are about 1 in 25. Most wins are $4.' },
+  { question: 'How many numbers do you need to win?', answer: 'All 5 white balls (picked from 1-69) plus the red Powerball (1-26) for the jackpot. Fewer matches still pay out. Matching just the Powerball alone gets you $4.' },
+  { question: 'What is Power Play?', answer: 'A $1 add-on that multiplies non-jackpot prizes. The multiplier is drawn separately: 2x, 3x, 4x, 5x, or 10x. One exception: the Match 5 prize always doubles to $2 million with Power Play, no matter what multiplier is drawn.' },
+  { question: 'How long do I have to claim a prize?', answer: 'Depends on your state. Some give you 90 days, others up to a year. Check your state lottery website for the exact deadline. Unclaimed prizes go back to the participating states.' },
 ];
 
 export default async function PowerballPage() {
@@ -53,13 +53,24 @@ export default async function PowerballPage() {
       </nav>
 
       {/* Hero */}
-      <div className="bg-gradient-to-br from-red-600 to-red-800 rounded-2xl p-6 sm:p-10 mb-8 text-white">
+      <div className="bg-gradient-to-br from-red-600 to-red-800 rounded-2xl p-6 sm:p-10 mb-6 text-white">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-bold mb-2">Powerball Results Today</h1>
-            <p className="text-red-100 text-lg">Latest winning numbers updated after every draw</p>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/15 text-white">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                Live Results
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-2">Powerball Winning Numbers Today</h1>
+            <p className="text-red-100 text-base sm:text-lg max-w-xl">
+              Latest Powerball results from the official Multi-State Lottery draw. Updated within minutes of every drawing.
+            </p>
             {latestResult && (
-              <p className="text-red-200 text-sm mt-2">Last Draw: {formatDate(latestResult.drawDate)}</p>
+              <div className="flex items-center gap-3 mt-3 flex-wrap">
+                <p className="text-red-200 text-sm">Last draw: {formatDate(latestResult.drawDate)}</p>
+                <LastUpdated drawDate={latestResult.drawDate} />
+              </div>
             )}
           </div>
           <div className="bg-white/10 backdrop-blur rounded-xl p-4">
@@ -93,6 +104,26 @@ export default async function PowerballPage() {
           </div>
         )}
       </div>
+
+      {/* AEO direct-answer snippet */}
+      {latestResult && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-8">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center flex-shrink-0">
+              <span className="text-red-600 dark:text-red-400 font-bold text-sm">?</span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">What were tonight&apos;s Powerball numbers?</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                The Powerball winning numbers for {formatDate(latestResult.drawDate)} are <strong className="text-gray-900 dark:text-white">{latestResult.numbers.join(', ')}</strong>
+                {latestResult.bonusBall !== undefined && <> with a Powerball of <strong className="text-red-600 dark:text-red-400">{latestResult.bonusBall}</strong></>}
+                {latestResult.multiplier && <>. Power Play was <strong>{latestResult.multiplier}x</strong></>}.
+                The next Powerball drawing is {latestResult.nextDrawDate ? formatDate(latestResult.nextDrawDate) : 'soon'} at 10:59 PM ET.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Prize Breakdown */}
       <div className="mb-8">
@@ -214,37 +245,77 @@ export default async function PowerballPage() {
       </div>
 
       {/* Deep SEO Content */}
-      <section className="mt-12 prose dark:prose-invert max-w-none">
-        <h2>Powerball Winning Numbers Today</h2>
-        <p>
-          Check the latest Powerball winning numbers right here at LottoNumbersUSA.com. Powerball draws take place
-          every Monday, Wednesday, and Saturday at 10:59 PM ET. Our results are updated within minutes of the
-          official draw, so you can quickly check if you are a winner.
-        </p>
-        <p>
-          Powerball is one of the two major multi-state lottery games in the United States, available in 45 states,
-          the District of Columbia, Puerto Rico, and the U.S. Virgin Islands. The game is coordinated by the
-          Multi-State Lottery Association (MUSL) and has been running since 1992.
-        </p>
-        <h3>How to Win Powerball</h3>
-        <p>
-          To win the Powerball jackpot, you need to match all 5 white balls (drawn from a pool of 1-69) plus the
-          red Powerball (drawn from a pool of 1-26). The odds of winning the jackpot are approximately 1 in 292 million.
-          However, there are 9 different prize tiers, and the overall odds of winning any prize are approximately 1 in 24.87.
-        </p>
-        <h3>Powerball Prize Tiers</h3>
-        <p>
-          Powerball offers 9 ways to win. The minimum jackpot starts at $20 million and grows with each drawing that
-          has no jackpot winner. The second prize of $1 million is awarded for matching all 5 white balls without the
-          Powerball. With Power Play, this prize doubles to $2 million. Smaller prizes range from $4 (Powerball only)
-          to $50,000 (4 white balls + Powerball).
-        </p>
-        <h3>Powerball Drawing Schedule</h3>
-        <p>
-          Powerball drawings are conducted three times per week: Monday, Wednesday, and Saturday evenings at 10:59 PM
-          Eastern Time. The drawings are broadcast live from the Florida Lottery draw studio in Tallahassee. Sales
-          cut off at least 1-2 hours before the drawing, depending on your state.
-        </p>
+      <section className="mt-12 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 sm:p-8">
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Powerball Winning Numbers Today</h2>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+              Check the latest <strong className="text-gray-900 dark:text-white">Powerball winning numbers</strong> right here at <strong className="text-gray-900 dark:text-white">LottoNumbersUSA.com</strong>. Powerball draws take place
+              every Monday, Wednesday, and Saturday at <strong className="text-gray-900 dark:text-white">10:59 PM ET</strong>. Our results are updated within minutes of the
+              official draw, so you can quickly check if you are a winner.
+            </p>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
+              <strong className="text-gray-900 dark:text-white">Powerball</strong> is one of the two major multi-state lottery games in the United States, available in <strong className="text-gray-900 dark:text-white">45 states</strong>,
+              the District of Columbia, Puerto Rico, and the U.S. Virgin Islands. The game is coordinated by the
+              Multi-State Lottery Association (MUSL) and has been running since 1992.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">How to Win Powerball</h3>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-3">
+              To win the <strong className="text-gray-900 dark:text-white">Powerball jackpot</strong>, you need to match all 5 white balls plus the red Powerball. There are <strong className="text-gray-900 dark:text-white">9 different prize tiers</strong>, so you can win even without matching all numbers.
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Detail</th>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Value</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-700 text-gray-600 dark:text-gray-400">
+                  <tr><td className="px-4 py-2 font-medium">White Ball Pool</td><td className="px-4 py-2">1 to 69 (pick 5)</td></tr>
+                  <tr><td className="px-4 py-2 font-medium">Powerball Pool</td><td className="px-4 py-2">1 to 26 (pick 1)</td></tr>
+                  <tr><td className="px-4 py-2 font-medium">Jackpot Odds</td><td className="px-4 py-2 font-mono text-xs">1 in 292,201,338</td></tr>
+                  <tr><td className="px-4 py-2 font-medium">Any Prize Odds</td><td className="px-4 py-2 font-mono text-xs">~1 in 24.87</td></tr>
+                  <tr><td className="px-4 py-2 font-medium">Starting Jackpot</td><td className="px-4 py-2 font-bold text-green-600 dark:text-green-400">$20 Million</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Powerball Drawing Schedule</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {['Monday', 'Wednesday', 'Saturday'].map(day => (
+                <div key={day} className="flex items-center gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-900/20">
+                  <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"/></svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{day}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">10:59 PM ET</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
+              Drawings are broadcast live from the Florida Lottery draw studio in Tallahassee. Sales cut off 1-2 hours before the drawing.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Related Tools</h3>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/check-your-numbers" className="px-3 py-1.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 hover:opacity-80 transition-opacity">Check Your Numbers</Link>
+              <Link href="/number-generator" className="px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 hover:opacity-80 transition-opacity">Number Generator</Link>
+              <Link href="/number-frequency" className="px-3 py-1.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400 hover:opacity-80 transition-opacity">Number Frequency</Link>
+              <Link href="/mega-millions" className="px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 hover:opacity-80 transition-opacity">Mega Millions Results</Link>
+              <Link href="/jackpot-tracker" className="px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 hover:opacity-80 transition-opacity">Jackpot Tracker</Link>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* FAQ Section */}

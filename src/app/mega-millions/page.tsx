@@ -10,10 +10,10 @@ import CheckYourNumbers from '@/components/CheckYourNumbers';
 import PrizeBreakdown from '@/components/PrizeBreakdown';
 import SocialShare from '@/components/SocialShare';
 import JackpotHistoryChart from '@/components/JackpotHistoryChart';
+import LastUpdated from '@/components/LastUpdated';
 import WatchDrawing from '@/components/WatchDrawing';
 import WinnerStories from '@/components/WinnerStories';
 
-export const revalidate = 300;
 
 const seo = getGameSEO('Mega Millions', 'mega-millions');
 export const metadata: Metadata = {
@@ -23,12 +23,12 @@ export const metadata: Metadata = {
 };
 
 const megaMillionsFAQs = [
-  { question: 'What time is the Mega Millions drawing?', answer: 'Mega Millions drawings are held every Tuesday and Friday at 11:00 PM Eastern Time. Results are typically available on our site within minutes of the official draw.' },
-  { question: 'How much does a Mega Millions ticket cost?', answer: 'A standard Mega Millions ticket costs $2. You can add the Megaplier option for an extra $1, which multiplies non-jackpot prizes by 2x, 3x, 4x, or 5x.' },
-  { question: 'What are the odds of winning the Mega Millions jackpot?', answer: 'The odds of winning the Mega Millions jackpot are 1 in 302,575,350. The overall odds of winning any Mega Millions prize are approximately 1 in 24.' },
-  { question: 'How do you play Mega Millions?', answer: 'To play Mega Millions, pick 5 numbers from 1 to 70 (white balls) and 1 number from 1 to 25 (the gold Mega Ball). Match all 6 numbers to win the jackpot. You can also use Quick Pick to have the terminal randomly select your numbers.' },
-  { question: 'What is the Megaplier?', answer: 'The Megaplier is an optional add-on that costs $1 extra per play. It multiplies non-jackpot prizes by 2x, 3x, 4x, or 5x, depending on the Megaplier number drawn. For example, a $1 million Match 5 prize becomes $2 million, $3 million, $4 million, or $5 million with the Megaplier.' },
-  { question: 'What is the biggest Mega Millions jackpot ever?', answer: 'The largest Mega Millions jackpot in history was $1.537 billion, won on October 23, 2018, by a single ticket sold in South Carolina. It remains one of the largest lottery prizes ever awarded worldwide.' },
+  { question: 'What time is the Mega Millions drawing?', answer: 'Tuesday and Friday at 11:00 PM Eastern. Numbers usually show up here within a few minutes.' },
+  { question: 'How much does a Mega Millions ticket cost?', answer: '$2 per play. The Megaplier add-on costs $1 extra and multiplies non-jackpot prizes by 2x, 3x, 4x, or 5x.' },
+  { question: 'What are the odds of winning?', answer: '1 in 302,575,350 for the jackpot. About 1 in 24 for any prize at all. Most wins are small ($2 to $10).' },
+  { question: 'How do you play?', answer: 'Pick 5 numbers from 1 to 70, then 1 Mega Ball from 1 to 25. Match all 6 for the jackpot. Or just ask for a Quick Pick and let the machine choose.' },
+  { question: 'What is the Megaplier?', answer: 'A $1 add-on. It multiplies non-jackpot prizes by 2x to 5x. So a $1 million Match 5 prize could become $5 million. The multiplier number is drawn separately.' },
+  { question: 'What was the biggest Mega Millions jackpot?', answer: '$1.537 billion, won in October 2018 from a single ticket sold in South Carolina.' },
 ];
 
 export default async function MegaMillionsPage() {
@@ -53,13 +53,24 @@ export default async function MegaMillionsPage() {
       </nav>
 
       {/* Hero */}
-      <div className="bg-gradient-to-br from-blue-700 to-blue-900 rounded-2xl p-6 sm:p-10 mb-8 text-white">
+      <div className="bg-gradient-to-br from-blue-700 to-blue-900 rounded-2xl p-6 sm:p-10 mb-6 text-white">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-bold mb-2">Mega Millions Results Today</h1>
-            <p className="text-blue-200 text-lg">Latest winning numbers updated after every draw</p>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/15 text-white">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                Live Results
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-2">Mega Millions Winning Numbers Today</h1>
+            <p className="text-blue-200 text-base sm:text-lg max-w-xl">
+              Latest Mega Millions results from the official draw. Updated within minutes of every Tuesday and Friday drawing.
+            </p>
             {latestResult && (
-              <p className="text-blue-300 text-sm mt-2">Last Draw: {formatDate(latestResult.drawDate)}</p>
+              <div className="flex items-center gap-3 mt-3 flex-wrap">
+                <p className="text-blue-300 text-sm">Last draw: {formatDate(latestResult.drawDate)}</p>
+                <LastUpdated drawDate={latestResult.drawDate} />
+              </div>
             )}
           </div>
           <div className="bg-white/10 backdrop-blur rounded-xl p-4">
@@ -101,6 +112,25 @@ export default async function MegaMillionsPage() {
           </div>
         )}
       </div>
+
+      {/* AEO direct-answer snippet */}
+      {latestResult && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-8">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center flex-shrink-0">
+              <span className="text-blue-600 dark:text-blue-400 font-bold text-sm">?</span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">What were tonight&apos;s Mega Millions numbers?</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                The Mega Millions winning numbers for {formatDate(latestResult.drawDate)} are <strong className="text-gray-900 dark:text-white">{latestResult.numbers.join(', ')}</strong>
+                {latestResult.bonusBall !== undefined && <> with a Mega Ball of <strong className="text-blue-600 dark:text-blue-400">{latestResult.bonusBall}</strong></>}
+                . The next Mega Millions drawing is {latestResult.nextDrawDate ? formatDate(latestResult.nextDrawDate) : 'soon'} at 11:00 PM ET.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Prize Breakdown */}
       <div className="mb-8">
@@ -217,41 +247,76 @@ export default async function MegaMillionsPage() {
       </div>
 
       {/* Deep SEO Content */}
-      <section className="mt-12 prose dark:prose-invert max-w-none">
-        <h2>Mega Millions Winning Numbers Today</h2>
-        <p>
-          Check the latest Mega Millions winning numbers right here at LottoNumbersUSA.com. Mega Millions draws take
-          place every Tuesday and Friday at 11:00 PM ET. Our results are updated within minutes of the official draw,
-          so you can quickly check if you are a winner. Mega Millions is one of America&#39;s two biggest lottery games,
-          offering jackpots that frequently climb into the hundreds of millions of dollars.
-        </p>
-        <p>
-          Mega Millions is a multi-state lottery game available in 45 states, the District of Columbia, and the U.S.
-          Virgin Islands. The game was originally launched in 1996 as &quot;The Big Game&quot; and rebranded to Mega
-          Millions in 2002. It is administered by a consortium of state lotteries and has produced some of the largest
-          lottery prizes in world history.
-        </p>
-        <h3>How to Win Mega Millions</h3>
-        <p>
-          To win the Mega Millions jackpot, you need to match all 5 white balls (drawn from a pool of 1-70) plus the
-          gold Mega Ball (drawn from a separate pool of 1-25). The odds of winning the jackpot are approximately 1 in
-          302,575,350. However, there are 9 different prize tiers, and the overall odds of winning any prize are about
-          1 in 24. Even matching just the Mega Ball wins you $2.
-        </p>
-        <h3>Mega Millions Prize Tiers &amp; Megaplier</h3>
-        <p>
-          Mega Millions offers 9 ways to win. The minimum jackpot starts at $20 million and grows with each drawing
-          that has no jackpot winner. The second prize of $1 million is awarded for matching all 5 white balls without
-          the Mega Ball. With the Megaplier option ($1 extra), non-jackpot prizes can be multiplied by 2x, 3x, 4x, or
-          5x. For example, the $1 million Match 5 prize can become up to $5 million with the Megaplier.
-        </p>
-        <h3>Mega Millions Drawing Schedule</h3>
-        <p>
-          Mega Millions drawings are conducted twice per week: Tuesday and Friday evenings at 11:00 PM Eastern Time.
-          The drawings are held at WSB-TV studios in Atlanta, Georgia. Ticket sales typically cut off 15 minutes to
-          2 hours before the drawing, depending on the selling jurisdiction. All results shown on this page are
-          sourced from official state lottery data and updated automatically after each draw.
-        </p>
+      <section className="mt-12 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 sm:p-8">
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Mega Millions Winning Numbers Today</h2>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+              Check the latest <strong className="text-gray-900 dark:text-white">Mega Millions winning numbers</strong> right here at <strong className="text-gray-900 dark:text-white">LottoNumbersUSA.com</strong>. Mega Millions draws take
+              place every Tuesday and Friday at <strong className="text-gray-900 dark:text-white">11:00 PM ET</strong>. Our results are updated within minutes of the official draw.
+              Mega Millions is one of America&#39;s two biggest lottery games, offering jackpots that frequently climb into the hundreds of millions.
+            </p>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
+              <strong className="text-gray-900 dark:text-white">Mega Millions</strong> is available in <strong className="text-gray-900 dark:text-white">45 states</strong>, the District of Columbia, and the U.S. Virgin Islands. Originally launched in 1996 as &quot;The Big Game,&quot; it was rebranded to Mega Millions in 2002 and has produced some of the largest lottery prizes in world history.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">How to Win Mega Millions</h3>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-3">
+              To win the <strong className="text-gray-900 dark:text-white">Mega Millions jackpot</strong>, match all 5 white balls plus the gold Mega Ball. There are <strong className="text-gray-900 dark:text-white">9 prize tiers</strong> — even matching just the Mega Ball wins you $2.
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Detail</th>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Value</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-700 text-gray-600 dark:text-gray-400">
+                  <tr><td className="px-4 py-2 font-medium">White Ball Pool</td><td className="px-4 py-2">1 to 70 (pick 5)</td></tr>
+                  <tr><td className="px-4 py-2 font-medium">Mega Ball Pool</td><td className="px-4 py-2">1 to 25 (pick 1)</td></tr>
+                  <tr><td className="px-4 py-2 font-medium">Jackpot Odds</td><td className="px-4 py-2 font-mono text-xs">1 in 302,575,350</td></tr>
+                  <tr><td className="px-4 py-2 font-medium">Any Prize Odds</td><td className="px-4 py-2 font-mono text-xs">~1 in 24</td></tr>
+                  <tr><td className="px-4 py-2 font-medium">Megaplier</td><td className="px-4 py-2">2x, 3x, 4x, or 5x (extra $1)</td></tr>
+                  <tr><td className="px-4 py-2 font-medium">Starting Jackpot</td><td className="px-4 py-2 font-bold text-green-600 dark:text-green-400">$20 Million</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Mega Millions Drawing Schedule</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {['Tuesday', 'Friday'].map(day => (
+                <div key={day} className="flex items-center gap-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                  <div className="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"/></svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{day}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">11:00 PM ET</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
+              Drawings are held at WSB-TV studios in Atlanta, Georgia. Sales cut off 15 minutes to 2 hours before the drawing.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Related Tools</h3>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/check-your-numbers" className="px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 hover:opacity-80 transition-opacity">Check Your Numbers</Link>
+              <Link href="/number-generator" className="px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 hover:opacity-80 transition-opacity">Number Generator</Link>
+              <Link href="/number-frequency" className="px-3 py-1.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400 hover:opacity-80 transition-opacity">Number Frequency</Link>
+              <Link href="/powerball" className="px-3 py-1.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 hover:opacity-80 transition-opacity">Powerball Results</Link>
+              <Link href="/jackpot-tracker" className="px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 hover:opacity-80 transition-opacity">Jackpot Tracker</Link>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* FAQ Section */}

@@ -162,12 +162,14 @@ export default async function GamePage({ params }: { params: Promise<{ state: st
         </div>
       </div>
 
-      <section className="mt-12 prose dark:prose-invert max-w-none">
-        <h2>{state.name} {gameConfig.name} Winning Numbers</h2>
-        <p>
-          Get the latest {state.name} {gameConfig.name} results right here. {gameConfig.description} Draws take
-          place {gameConfig.drawDays.join(', ')} at {gameConfig.drawTime}. Results are updated automatically.
-        </p>
+      <section className="mt-12 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 sm:p-8">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{state.name} {gameConfig.name} Winning Numbers</h2>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            Get the latest <strong className="text-gray-900 dark:text-white">{state.name} {gameConfig.name}</strong> results right here. {gameConfig.description} Draws take
+            place {gameConfig.drawDays.join(', ')} at {gameConfig.drawTime}. Results are updated automatically.
+          </p>
+        </div>
       </section>
     </div>
   );

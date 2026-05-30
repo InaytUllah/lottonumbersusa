@@ -5,6 +5,15 @@ import { fetchPastResults, formatDate } from '@/lib/api/lottery-api';
 import { POWERBALL } from '@/lib/data/games';
 import { getResultDateSEO } from '@/lib/data/seo';
 
+// Static export: enumerate all dated result pages at build time. Dates
+// outside this set return 404 (no on-demand generation in static export).
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const results = await fetchPastResults('powerball', 100);
+  return results.map(r => ({ date: r.drawDate }));
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ date: string }> }): Promise<Metadata> {
   const { date } = await params;
   const seo = getResultDateSEO('Powerball', date);
